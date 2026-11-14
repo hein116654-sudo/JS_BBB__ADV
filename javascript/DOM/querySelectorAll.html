@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <p class="text">HTML</p>
+        <p class="text">CSS</p>
+        <p class="text">JavaScript</p>
+        <script>
+            const elements = document.querySelectorAll(".text");
+
+            console.log(elements);
+            console.log(elements.length);
+            elements.forEach((element) => {
+                console.log(element.textContent);
+            });
+        </script>
+    </body>
+</html>

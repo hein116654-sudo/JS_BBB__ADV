@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Variables</title>
+    </head>
+    <body>
+        <script>
+            //var, let, const
+
+            var city = "Yangon";
+            var city = "Mandalay"; 
+            city = "Naypyidaw";
+            console.log("var city:", city);
+
+            let score = 50;
+            score = 85;
+            console.log("let score:", score);
+
+            const birthYear = 2000;
+            // birthYear = 2005;
+            console.log("const birthYear:", birthYear);
+
+            const colors = ["red", "blue"];
+            colors.push("green");
+            console.log("const array modified:", colors);
+
+            { //Scope Difference Example
+            var x = 10;   
+            let y = 20;   
+            const z = 30; 
+            console.log("Inside block:", x, y, z);
+            }
+            console.log("Outside block x (var):", x); // Works: 10
+            // console.log(y); // ERROR: y is not defined
+            // console.log(z); // ERROR: z is not defined
+
+            //Variable Naming Rules
+            let firstName = "Kyaw";
+            let _privateId = 101;
+            let $price = 9.99;
+            console.log(firstName, _privateId, $price);
+
+        </script>
+    </body>
+</html>

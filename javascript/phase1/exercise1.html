@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+
+            console.log("=== EXERCISE 1: User Profile Card ===");
+            // Task: Store user data using appropriate variables (const/let) and print a summary.
+            const userName = "Aye Aye";
+            const birthYear = 1998;
+            const currentYear = 2026;
+            let isPremiumMember = true;
+
+            let currentAge = currentYear - birthYear;
+            let membershipText = isPremiumMember ? "Premium Member" : "Free User";
+
+            console.log(`Profile: ${userName}, Age: ${currentAge}, Status: ${membershipText}`);
+
+
+            console.log("\n=== EXERCISE 2: Discount & Final Price Calculator ===");
+            // Task: A laptop costs $800. There is a 15% discount and $25 shipping fee.
+            // Calculate the discount amount, discounted price, and final total.
+            const laptopPrice = 800;
+            const discountPercent = 15;
+            const shippingFee = 25;
+
+            let discountAmount = (laptopPrice * discountPercent) / 100;
+            let priceAfterDiscount = laptopPrice - discountAmount;
+            let finalTotal = priceAfterDiscount + shippingFee;
+
+            console.log(`Original Price: $${laptopPrice}`);
+            console.log(`Discount (${discountPercent}%): -$${discountAmount}`);
+            console.log(`Final Total (with $${shippingFee} shipping): $${finalTotal}`);
+
+
+            console.log("\n=== EXERCISE 3: Fixing String Input Math (Type Conversion) ===");
+            // Task: Form inputs usually come as Strings. Convert them to Numbers to calculate BMI.
+            // Formula: BMI = weight (kg) / (height (m) ** 2)
+            let weightInput = "65";   // String from user input
+            let heightInput = "1.70"; // String from user input
+
+            let weight = Number(weightInput);
+            let height = parseFloat(heightInput);
+
+            let bmi = weight / (height ** 2);
+            // .toFixed(2) rounds to 2 decimal places (returns a string)
+            console.log(`Weight: ${weight}kg, Height: ${height}m -> BMI: ${bmi.toFixed(2)}`);
+
+
+            console.log("\n=== EXERCISE 4: Even/Odd & Voting Eligibility Checker ===");
+            // Task: Given a number and an age, check if the number is Even or Odd,
+            // and check if the person can vote (age >= 18 and isCitizen === true).
+            let testNumber = 27;
+            let evenOrOdd = (testNumber % 2 === 0) ? "Even" : "Odd";
+            console.log(`${testNumber} is an ${evenOrOdd} number.`);
+
+            let personAge = 20;
+            let isCitizen = true;
+            let canVote = (personAge >= 18 && isCitizen) ? "Eligible to vote" : "Not eligible to vote";
+            console.log(`Voting Status: ${canVote}`);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            //TYPE CONVERSION (Manual / Explicit)
+            // Converting to String
+            let score = 100;
+            let str1 = String(score);
+            let str2 = score.toString();
+            console.log(str1, typeof str1);
+            console.log(str2, typeof str2);
+            
+            //Converting to Number
+            let inputAge = "24";
+            let num1 = Number(inputAge);
+            let num2 = parseInt("24px");     // 24 (extracts integer from start)
+            let num3 = parseFloat("19.95");  // 19.95 (keeps decimals)
+            let invalidNum = Number("hello"); // NaN (Not a Number)
+
+            console.log(num1, typeof num1);  // 24 number
+            console.log(num2, num3);         // 24 19.95
+            console.log("Invalid conversion:", invalidNum, "| Is NaN?:", Number.isNaN(invalidNum));
+
+
+            //Converting to Boolean (Truthy & Falsy values)
+            // Falsy values in JS are ONLY: 0, "", null, undefined, NaN, false
+            console.log("Boolean(0):", Boolean(0)); 
+            console.log("Boolean(''):", Boolean(""));   
+            console.log("Boolean(null):", Boolean(null));
+            console.log("Boolean(123):", Boolean(123));  
+            console.log("Boolean('Hi'):", Boolean("Hi"));  
+
+            //TYPE COERCION (Automatic / Implicit by JS)
+            //'+' operator with a String triggers String Concatenation
+            console.log("'5' + 2 =", "5" + 2);         // "52" (2 becomes a string)
+            console.log("5 + '2' + 3 =", 5 + "2" + 3); // "523"
+            console.log("5 + 2 + '3' =", 5 + 2 + "3"); // "73" (5+2=7 first, then + "3")
+
+            //'-', '*', '/' operators convert Strings to Numbers
+            console.log("'10' - 4 =", "10" - 4);       // 6
+            console.log("'10' * '2' =", "10" * "2");   // 20
+            console.log("'20' / 5 =", "20" / 5);       // 4
+
+            //Booleans in math (true = 1, false = 0)
+            console.log("true + 1 =", true + 1);       // 2
+            console.log("false + 5 =", false + 5);     // 5
+        </script>
+    </body>
+</html>

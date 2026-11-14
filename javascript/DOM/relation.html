@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM Relationships Example</title>
+</head>
+<body>
+
+    <div id="parent">
+        <h1>Title</h1>
+        <p>Paragraph</p>
+        <button>Click Me</button>
+    </div>
+
+    <script>
+        // ၁။ အဓိက Parent Element ကို အရင်ရွေးချယ်ခြင်း
+        const parent = document.querySelector("#parent");
+
+        console.log("=== 1. Parent မှတဆင့် Child များကို ရှာဖွေခြင်း ===");
+        
+        // Child Elements အားလုံးကို HTMLCollection အနေဖြင့် ထုတ်ပေးသည်
+        console.log("All Children:", parent.children); 
+        
+        // ပထမဆုံး Child Element (h1)
+        console.log("First Child:", parent.firstElementChild); 
+        
+        // နောက်ဆုံး Child Element (button)
+        console.log("Last Child:", parent.lastElementChild); 
+        
+        // Index နံပါတ်သုံးပြီး အလယ်က Child ကို ယူခြင်း (0 = h1, 1 = p, 2 = button)
+        console.log("Second Child (children[1]):", parent.children[1]); 
+
+
+        console.log("\n=== 2. Child မှတဆင့် Parent ကို ပြန်ရှာခြင်း ===");
+        
+        const paragraph = document.querySelector("p");
+        // p ရဲ့ မိဘဖြစ်တဲ့ <div id="parent"> ကို ထုတ်ပေးသည်
+        console.log("Parent of <p>:", paragraph.parentElement); 
+        
+        // #parent ရဲ့ မိဘဖြစ်တဲ့ <body> ကို ထုတ်ပေးသည်
+        console.log("Parent of #parent:", parent.parentElement); 
+
+
+        console.log("\n=== 3. Siblings (ညီအစ်ကိုမောင်နှမ Elements) များကို ရှာဖွေခြင်း ===");
+        
+        // <p> ရဲ့ အရှေ့က Element (<h1>)
+        console.log("Previous Sibling of <p>:", paragraph.previousElementSibling); 
+        
+        // <p> ရဲ့ အနောက်က Element (<button>)
+        console.log("Next Sibling of <p>:", paragraph.nextElementSibling); 
+
+        // ပထမဆုံး Element ဖြစ်တဲ့ <h1> ရဲ့ အရှေ့မှာ ဘာမှမရှိလို့ null ထွက်ပါမည်
+        const heading = parent.firstElementChild;
+        console.log("Previous Sibling of <h1>:", heading.previousElementSibling); 
+    </script>
+
+</body>
+</html>

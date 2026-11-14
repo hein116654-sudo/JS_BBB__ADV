@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+       <script>
+            let x = 15;
+            let y = 4;
+
+            //Basic Arithmetic
+            console.log("Addition (15 + 4):", x + y);
+            console.log("Subtraction (15 - 4):", x - y); 
+            console.log("Multiplication (15 * 4):", x * y);
+            console.log("Division (15 / 4):", x / y);
+            console.log("Modulus / Remainder (15 % 4):", x % y);
+            console.log("Exponentiation (2 ** 3):", 2 ** 3);
+
+            //Operator Precedence (PEMDAS / BODMAS)
+            let calc1 = 10 + 5 * 2; 
+            let calc2 = (10 + 5) * 2; 
+            console.log("Without ():", calc1, "| With ():", calc2);
+
+            //Useful Math Object Methods
+            console.log("Math.round(4.5):", Math.round(4.5));
+            console.log("Math.floor(4.9):", Math.floor(4.9)); 
+            console.log("Math.ceil(4.1):", Math.ceil(4.1));
+            console.log("Math.max(3, 9, 1):", Math.max(3, 9, 1));
+            console.log("Math.min(3, 9, 1):", Math.min(3, 9, 1));
+            console.log("Math.sqrt(25):", Math.sqrt(25));
+
+            // Random number between 1 and 10
+            let randomNum = Math.floor(Math.random() * 10) + 1;
+            console.log("Random number (1-10):", randomNum);
+
+            //Practical Example: Total Bill Calculation
+            let itemPrice = 25000;
+            let quantity = 3;
+            let taxRate = 0.05; // 5% tax
+
+            let subtotal = itemPrice * quantity;
+            let taxAmount = subtotal * taxRate;
+            let total = subtotal + taxAmount;
+
+            console.log(`Subtotal: ${subtotal} MMK`);
+            console.log(`Tax (5%): ${taxAmount} MMK`);
+            console.log(`Total Payable: ${total} MMK`);
+       </script> 
+    </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Data Types</title>
+    </head>
+
+    <body>
+        <script>
+
+            //PRIMITIVE DATA TYPES
+            // String (Text)
+            let fullName = "Hla Hla";
+            let greeting = 'Mingalaba';
+            let templateStr = `Hello, ${fullName}!`; // Template literal (Backticks)
+            console.log(templateStr, "| Type:", typeof templateStr);
+
+            //Number (Integers & Decimals)
+            let age = 25;
+            let price = 19.99;
+            console.log(age, price, "| Type:", typeof age);
+
+            //Boolean (true or false)
+            let isLoggedIn = true;
+            let hasDiscount = false;
+            console.log(isLoggedIn, "| Type:", typeof isLoggedIn);
+
+            //Undefined (Declared, but no value assigned yet)
+            let userAddress;
+            console.log(userAddress, "| Type:", typeof userAddress);
+
+            //Null (Intentional empty/no value)
+            let selectedItem = null;
+            // Famous JS bug: typeof null returns "object"
+            console.log(selectedItem, "| Type:", typeof selectedItem);
+
+            //BigInt (Very large integers - add 'n' at the end)
+            let bigNumber = 9007199254740991999n;
+            console.log(bigNumber, "| Type:", typeof bigNumber);
+
+            //Symbol (Unique identifier)
+            let uniqueId = Symbol("id");
+            console.log(uniqueId, "| Type:", typeof uniqueId);
+
+
+            // NON-PRIMITIVE (REFERENCE) DATA TYPES
+
+            // Object (Key-Value pairs)
+            let student = {
+            name: "Tun Tun",
+            age: 20,
+            isEnrolled: true
+            };
+            console.log("Student Object:", student, "| Type:", typeof student);
+            console.log("Student Name:", student.name);
+
+            // Array (Ordered list of items - typeof is also "object")
+            let fruits = ["Apple", "Banana", "Mango"];
+            console.log("Fruits Array:", fruits, "| Is Array?:", Array.isArray(fruits));
+            console.log("First Fruit:", fruits[0]);
+
+            // 3. Function
+            function sayHello() {
+            return "Hello from Function!";
+            }
+            console.log(sayHello(), "| Type:", typeof sayHello);
+        </script>
+    </body>
+</html>

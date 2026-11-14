@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+
+            //Assignment Operators
+            let num = 10;
+            num += 5;
+            num -= 3;
+            num *= 2;
+            num /= 4;  
+            console.log("Assignment result:", num);
+
+            //Increment & Decrement Operators
+            let counter = 5;
+            console.log("Post-increment (counter++):", counter++); 
+            console.log("After post-increment:", counter);
+            console.log("Pre-increment (++counter):", ++counter);      
+            
+            //Comparison Operators (Always return true or false)
+            let a = 10;
+            let b = "10";
+
+            console.log("10 == '10' (Loose equality):", a == b); 
+            console.log("10 === '10' (Strict equality):", a === b);
+            console.log("10 != '10':", a != b);           
+            console.log("10 !== '10':", a !== b);             
+            console.log("10 > 5:", a > 5);                         
+            console.log("10 <= 10:", a <= 10);    
+            
+            // 4. Logical Operators (&& AND, || OR, ! NOT)
+            let hasTicket = true;
+            let hasID = false;
+
+            console.log("AND (&&):", hasTicket && hasID); 
+            console.log("OR (||):", hasTicket || hasID);
+            console.log("NOT (!):", !hasID); 
+            
+            //Ternary Operator (Shortcut for if-else)
+            let userAge = 18;
+            let status = userAge >= 18 ? "Adult" : "Minor";
+            console.log("Age Status:", status);
+            
+        </script>
+    </body>
+</html>
