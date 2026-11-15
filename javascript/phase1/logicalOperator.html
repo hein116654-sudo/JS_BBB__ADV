@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            //Form Validation using && (All conditions must be true)
+            let username = "kyawkyaw";
+            let email = "kyaw@example.com";
+            let age = 22;
+            let agreedToTerms = true;
+
+            let isUsernameValid = username.length >= 4;
+            let isEmailValid = email.includes("@") && email.includes(".");
+            let isAgeValid = age >= 18;
+
+            if (isUsernameValid && isEmailValid && isAgeValid && agreedToTerms) {
+            console.log("Registration Successful!");
+            } else {
+            console.log("Registration Failed! Please check all fields and accept terms.");
+            }
+
+            //Access Check using || (At least one condition must be true)
+            let isAdmin = false;
+            let isModerator = true;
+            let isAccountBanned = false;
+
+            // Use parentheses () to group conditions clearly!
+            if ((isAdmin || isModerator) && !isAccountBanned) {
+            console.log("Dashboard Access Granted.");
+            } else {
+            console.log("Dashboard Access Denied.");
+            }
+
+            // NOT (!) Operator with Truthy/Falsy Validation
+            let inputName = ""; // Empty string is Falsy
+
+            if (!inputName) {
+            console.log("Validation Error: Name field cannot be empty!");
+            } else {
+            console.log(`Hello, ${inputName}`);
+            }
+
+            // Short-Circuiting with || (Default Fallback Value)
+            let customNickname = "";
+            let displayName = customNickname || "Guest User";
+            console.log("Welcome,", displayName); // Prints "Guest User"
+        </script>
+    </body>
+</html>

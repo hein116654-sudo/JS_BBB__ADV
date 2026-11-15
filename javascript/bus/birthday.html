@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday 3D Cake 🎂</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Three.js Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <!-- Extra JS Libraries: GSAP & Canvas-Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- 3D Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <button id="open-customizer-btn" class="icon-btn" title="Customize Link">⚙️</button>
+  </header>
+
+  <!-- Bottom Interactive HUD -->
+  <main class="hud-container">
+    <!-- Step Progress Dots -->
+    <div class="steps-indicator">
+      <span class="dot active" id="dot-0"></span>
+      <span class="dot" id="dot-1"></span>
+      <span class="dot" id="dot-2"></span>
+    </div>
+
+    <p class="status-text" id="status-text">
+      မွေးနေ့ကိတ်လေးပေါ်မှာ ဖယောင်းတိုင် စိုက်ကြရအောင်! 🕯️
+    </p>
+
+    <!-- Blow Power Meter (Visible during Blow step) -->
+    <div class="blow-meter-wrap hidden" id="blow-meter-wrap">
+      <div class="blow-label">
+        <span>💨 လေမှုတ်အား (Mic ထဲ မှုတ်ပါ)</span>
+        <span id="blow-percent">0%</span>
+      </div>
+      <div class="blow-bar-bg">
+        <div class="blow-bar-fill" id="blow-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions" id="action-buttons">
+      <button id="btn-plant" class="primary-btn">🕯️ ဖယောင်းတိုင် စိုက်မယ်</button>
+      <button id="btn-light" class="primary-btn hidden">🔥 မီးထွန်းမယ်</button>
+      <div id="blow-controls" class="blow-controls hidden">
+        <button id="btn-mic" class="primary-btn">🎤 မိုက်ဖွင့်ပြီး မှုတ်မယ်</button>
+        <button id="btn-tap-blow" class="secondary-btn">💨 နှိပ်ပြီး မှုတ်မယ်</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Birthday Wish Modal (Drops down after blowing candles) -->
+  <div class="modal-backdrop hidden" id="wish-modal-backdrop">
+    <div class="wish-modal" id="wish-modal">
+      <div class="modal-ribbon">🎉 HAPPY BIRTHDAY 🎉</div>
+      <div class="modal-emoji">🎂✨💖</div>
+      <h1 class="recipient-title">Happy Birthday, <span id="display-to">Chit Thu</span>!</h1>
+      <p class="wish-message" id="display-msg">
+        မွေးနေ့မှစပြီး နောင်နှစ်ပေါင်းများစွာတိုင်အောင် ပျော်ရွှင်ချမ်းမြေ့ပြီး စိတ်ကူးအိပ်မက်တွေ အကုန်ပြည့်ဝပါစေနော်! 🥳💐
+      </p>
+      <div class="wish-sender">From: <span id="display-from">Your Special Someone</span> 💌</div>
+      <button id="btn-replay" class="primary-btn replay-btn">🔄 ပြန်ကစားမယ်</button>
+    </div>
+  </div>
+
+  <!-- Seller / Customizer Modal (For creating links to sell!) -->
+  <div class="modal-backdrop hidden" id="customizer-backdrop">
+    <div class="customizer-modal">
+      <div class="customizer-header">
+        <h2>🛠️ Customer Link ထုတ်ရန်</h2>
+        <button id="close-customizer-btn" class="close-x">✕</button>
+      </div>
+      <div class="form-group">
+        <label>မွေးနေ့ရှင် နာမည် (To):</label>
+        <input type="text" id="input-to" placeholder="ဥပမာ - Su Myat" />
+      </div>
+      <div class="form-group">
+        <label>ပို့သူ နာမည် (From):</label>
+        <input type="text" id="input-from" placeholder="ဥပမာ - Ko Ko" />
+      </div>
+      <div class="form-group">
+        <label>မွေးနေ့ဆုတောင်းစာ (Message):</label>
+        <textarea id="input-msg" rows="3" placeholder="ဆုတောင်းစာ ရေးပါ..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>ကိတ်မုန့် အရောင် (Theme):</label>
+        <select id="input-theme">
+          <option value="pink">🍓 Strawberry Pink</option>
+          <option value="choco">🍫 Dark Chocolate</option>
+          <option value="blue">🩵 Sky Vanilla</option>
+        </select>
+      </div>
+      <button id="btn-generate-link" class="primary-btn">🔗 Link ထုတ်ပြီး Copy ကူးမယ်</button>
+      <p id="copy-feedback" class="copy-feedback"></p>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

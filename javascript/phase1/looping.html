@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            console.log("--- For Loop: Count 1 to 5 ---");
+            for (let i = 1; i <= 5; i++) {
+            console.log("Count:", i);
+            }
+
+            console.log("--- For Loop: Countdown 5 to 1 ---");
+            for (let i = 5; i >= 1; i--) {
+            console.log("Countdown:", i);
+            }
+
+            // Looping through an Array
+            let languages = ["HTML", "CSS", "JavaScript"];
+            console.log("--- Looping through Array ---");
+            for (let i = 0; i < languages.length; i++) {
+            console.log(`${i + 1}. ${languages[i]}`);
+            }
+
+            // --- 2. WHILE LOOP (Best when you don't know exact iterations beforehand) ---
+            console.log("--- While Loop: Saving Money ---");
+            let savedMoney = 0;
+            let goal = 300;
+            let week = 0;
+
+            while (savedMoney < goal) {
+            week++;
+            savedMoney += 100;
+            console.log(`Week ${week}: Saved $${savedMoney}`);
+            }
+            console.log(`Goal of $${goal} reached in ${week} weeks!`);
+
+            // --- 3. DO-WHILE LOOP (Always runs AT LEAST ONCE, even if condition is false) ---
+            console.log("--- Do-While Loop ---");
+            let attempt = 5;
+
+            do {
+            console.log("This runs once! Attempt value:", attempt);
+            attempt++;
+            } while (attempt < 3); // Condition is false (5 < 3), so it stops after 1st run
+        </script>
+    </body>
+</html>

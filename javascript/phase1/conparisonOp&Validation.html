@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // Why '===' is safer than '==' in Validation
+            let userInput = ""; // Empty string from a form input
+            let zeroNumber = 0;
+
+            console.log("'' == 0 :", userInput == zeroNumber);   // true (Dangerous bug in validation!)
+            console.log("'' === 0 :", userInput === zeroNumber); // false (Accurate!)
+
+            console.log("0 == false :", 0 == false);             // true
+            console.log("0 === false :", 0 === false);           // false
+
+            //Strict Inequality (!==) vs Loose Inequality (!=)
+            let statusCode = "404";
+            if (statusCode !== 404) {
+            console.log("Type mismatch: '404' (string) is NOT strictly equal to 404 (number).");
+            }
+
+            //Range Validation (>, <, >=, <=)
+            let productQuantity = 12;
+            const minOrder = 1;
+            const maxOrder = 10;
+
+            if (productQuantity < minOrder) {
+            console.log(`Error: Minimum order is ${minOrder}.`);
+            } else if (productQuantity > maxOrder) {
+            console.log(`Error: You can only buy up to ${maxOrder} items at once.`);
+            } else {
+            console.log("Quantity is valid. Proceeding to checkout.");
+            }
+
+            //Case-Insensitive String Comparison
+            let savedEmail = "mgmg@gmail.com";
+            let enteredEmail = "MgMg@Gmail.com";
+
+            //Always convert to lowercase before comparing emails/usernames
+            if (savedEmail.toLowerCase() === enteredEmail.toLowerCase()) {
+            console.log("Email matched!");
+            } else {
+            console.log("Email does not match.");
+            }           
+        </script>
+    </body>
+</html>

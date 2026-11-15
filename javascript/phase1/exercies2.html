@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ------------------------------------------
+            // EXERCISE 1: Password & Confirm Password Validator
+            // ------------------------------------------
+            console.log("=== EXERCISE 1: Signup Validation ===");
+            let newPassword = "mySecret123";
+            let confirmPassword = "mySecret123";
+            let hasNumber = false;
+
+            // Loop through password characters to check if it contains at least one digit
+            for (let i = 0; i < newPassword.length; i++) {
+            let char = newPassword[i];
+            if (char >= "0" && char <= "9") {
+                hasNumber = true;
+                break;
+            }
+            }
+
+            if (newPassword.length < 8) {
+            console.log("Error: Password must be at least 8 characters.");
+            } else if (!hasNumber) {
+            console.log("Error: Password must contain at least one number.");
+            } else if (newPassword !== confirmPassword) {
+            console.log("Error: Passwords do not match.");
+            } else {
+            console.log("Success: Strong password accepted!");
+            }
+
+
+            // ------------------------------------------
+            // EXERCISE 2: Classic FizzBuzz (Interview Favorite)
+            // Task: Print 1 to 15.
+            // - Divisible by 3 & 5 -> "FizzBuzz"
+            // - Divisible by 3 -> "Fizz"
+            // - Divisible by 5 -> "Buzz"
+            // - Otherwise print the number
+            // ------------------------------------------
+            console.log("\n=== EXERCISE 2: FizzBuzz (1 to 15) ===");
+            for (let n = 1; n <= 15; n++) {
+            if (n % 3 === 0 && n % 5 === 0) {
+                console.log("FizzBuzz");
+            } else if (n % 3 === 0) {
+                console.log("Fizz");
+            } else if (n % 5 === 0) {
+                console.log("Buzz");
+            } else {
+                console.log(n);
+            }
+            }
+
+
+            // ------------------------------------------
+            // EXERCISE 3: Shopping Cart Total with Validation & Discount
+            // Task: Sum valid prices (ignore negative or non-number values).
+            // If total >= 100, apply a 10% discount.
+            // ------------------------------------------
+            console.log("\n=== EXERCISE 3: Shopping Cart Checkout ===");
+            let cartPrices = [45, -10, 30, "invalid", 50, 0];
+            let cartTotal = 0;
+
+            for (let i = 0; i < cartPrices.length; i++) {
+            let price = cartPrices[i];
+
+            // Validation: skip if not a number or <= 0
+            if (typeof price !== "number" || price <= 0) {
+                console.log(`Ignored invalid cart item: ${price}`);
+                continue;
+            }
+            cartTotal += price;
+            }
+
+            console.log(`Subtotal: $${cartTotal}`);
+            if (cartTotal >= 100) {
+            let discount = cartTotal * 0.1;
+            console.log(`10% Discount Applied: -$${discount}`);
+            console.log(`Final Total: $${cartTotal - discount}`);
+            } else {
+            console.log(`Final Total: $${cartTotal} (Spend $100+ for 10% off)`);
+            }
+
+
+            // ------------------------------------------
+            // EXERCISE 4: ATM PIN Retry System (Max 3 Attempts)
+            // ------------------------------------------
+            console.log("\n=== EXERCISE 4: ATM PIN Verification ===");
+            const correctPIN = "4321";
+            let enteredPINs = ["1111", "2222", "4321", "9999"]; // Simulated user attempts
+            let maxAttempts = 3;
+            let isAuthenticated = false;
+
+            for (let i = 0; i < enteredPINs.length; i++) {
+            if (i >= maxAttempts) {
+                break;
+            }
+
+            let currentAttempt = enteredPINs[i];
+            console.log(`Attempt ${i + 1}: Trying PIN '${currentAttempt}'...`);
+
+            if (currentAttempt === correctPIN) {
+                console.log("PIN Correct! Access Granted.");
+                isAuthenticated = true;
+                break;
+            } else {
+                console.log("Incorrect PIN.");
+            }
+            }
+
+            if (!isAuthenticated) {
+            console.log("Account Locked: Too many failed attempts.");
+            }          
+        </script>
+    </body>
+</html>

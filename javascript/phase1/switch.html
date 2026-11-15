@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            //Basic switch with 'break' and 'default'
+            let userRole = "editor";
+
+            switch (userRole) {
+            case "admin":
+                console.log("Access: Full control (Create, Read, Update, Delete).");
+                break; // Stops checking further cases
+            case "editor":
+                console.log("Access: Can edit and publish articles.");
+                break;
+            case "viewer":
+                console.log("Access: Read-only mode.");
+                break;
+            default:
+                console.log("Invalid role! Access denied.");
+            }
+
+            //Grouping multiple cases together (Fall-through)
+            let day = "Saturday";
+
+            switch (day) {
+            case "Monday":
+            case "Tuesday":
+            case "Wednesday":
+            case "Thursday":
+            case "Friday":
+                console.log(`${day} is a Weekday. Time to work!`);
+                break;
+            case "Saturday":
+            case "Sunday":
+                console.log(`${day} is a Weekend. Time to relax!`);
+                break;
+            default:
+                console.log("Error: Not a valid day name.");
+            }
+
+            //Switch with Numbers (Menu Selection Simulation)
+            let menuOption = 2;
+
+            switch (menuOption) {
+            case 1:
+                console.log("Selected: Check Balance");
+                break;
+            case 2:
+                console.log("Selected: Transfer Money");
+                break;
+            case 3:
+                console.log("Selected: Exit");
+                break;
+            default:
+                console.log("Please choose option 1, 2, or 3.");
+            }
+        </script>
+    </body>
+</html>

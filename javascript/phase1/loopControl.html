@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            let users = ["Aung", "Su Su", "Mya", "Kyaw"];
+            let searchTarget = "Su Su";
+
+            console.log("--- Search using break ---");
+            for (let i = 0; i < users.length; i++) {
+            console.log("Checking:", users[i]);
+            if (users[i] === searchTarget) {
+                console.log(`Found ${searchTarget} at index ${i}! Stopping search.`);
+                break; // No need to check "Mya" and "Kyaw"
+            }
+            }
+
+            // 2. 'continue' (Skips the current iteration and moves to the next one)
+            console.log("--- Skip Invalid/Negative Numbers using continue ---");
+            let transactions = [500, -20, 1200, 0, 300, -50];
+            let totalValid = 0;
+
+            for (let i = 0; i < transactions.length; i++) {
+            if (transactions[i] <= 0) {
+                console.log(`Skipping invalid amount: ${transactions[i]}`);
+                continue; // Skip adding this item
+            }
+            totalValid += transactions[i];
+            }
+            console.log("Total Valid Transactions:", totalValid);
+
+            // 3. Nested Loops (Loop inside a Loop)
+            console.log("--- Nested Loop: Multiplication Table (1 to 3) ---");
+            for (let row = 1; row <= 3; row++) {
+            for (let col = 1; col <= 3; col++) {
+                console.log(`${row} x ${col} = ${row * col}`);
+            }
+            console.log("----------");
+            }
+
+            // 4. Nested Loop: Star Pattern
+            console.log("--- Star Triangle Pattern ---");
+            for (let i = 1; i <= 5; i++) {
+            let stars = "";
+            for (let j = 1; j <= i; j++) {
+                stars += "* ";
+            }
+            console.log(stars);
+            }         
+        </script>
+    </body>
+</html>
