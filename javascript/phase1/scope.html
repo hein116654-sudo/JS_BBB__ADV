@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // Global Scope (Accessible anywhere in this file)
+            const appName = "My JS App";
+
+            function showAppInfo() {
+            console.log("Inside function:", appName); // Can access global variable
+            }
+            showAppInfo();
+            console.log("Outside function:", appName);
+
+            // 2. Function (Local) Scope
+            function testLocalScope() {
+            const secretMessage = "Only inside this function";
+            var oldVar = "Also function-scoped";
+            console.log(secretMessage, "|", oldVar);
+            }
+            testLocalScope();
+            // console.log(secretMessage); // ERROR: secretMessage is not defined
+
+            // 3. Block Scope (Inside { }, if, or for loops)
+            if (true) {
+            let blockLet = "I stay inside the if-block";
+            const blockConst = "Me too";
+            var functionVar = "I leak out of blocks!";
+            console.log("Inside block:", blockLet, "|", blockConst);
+            }
+            // console.log(blockLet);    // ERROR: blockLet is not defined
+            console.log("Outside block:", functionVar); // Works (reason to avoid 'var')
+
+            // 4. Lexical Scope (Inner function can access Outer function variables)
+            function outerFunction() {
+            let outerText = "From Outer";
+
+            function innerFunction() {
+                let innerText = "From Inner";
+                console.log(outerText, "->", innerText);
+            }
+
+            innerFunction();
+            // console.log(innerText); // ERROR: Outer cannot access Inner's variables
+            }
+            outerFunction();
+
+            // 5. Variable Shadowing
+            let level = "Global Level";
+
+            function checkLevel() {
+            let level = "Local Level"; // Shadows the global variable inside this function
+            console.log("Inside checkLevel:", level);
+            }
+            checkLevel();
+            console.log("Outside checkLevel:", level); // Global remains unchanged
+        </script>        
+    </body>
+</html>

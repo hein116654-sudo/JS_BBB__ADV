@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+
+            //standard arrow function
+            const add = (a, b) => {
+                return a + b;
+            };
+            console.log("Add (3 + 7):", add (3, 7));//10
+
+            //implicit return
+            const multiply = (a, b) => a * b;
+            console.log("Multiply (4 * 6):", multiply(4, 6));//24
+
+            //single parameter
+            const square = x => x * x;
+
+            console.log("Square of 8:", square(8));//64
+
+            //no parameter
+            const getWelcomeMessage = () => "Welcome to Arrow Functions!";
+            
+            console.log(getWelcomeMessage());
+
+            //returning an object implicity
+            const createStudent = (name, grade) => ({
+                name: name,
+                grade: grade,
+                passed: grade >= 40
+            });
+            console.log(createStudent("Hla Hla", 75));
+        </script>
+    </body>
+</html>

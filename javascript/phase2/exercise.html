@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 7: Week 5 Exercises
+            // ==========================================
+
+            const students = [
+            { id: 1, name: "Aung", age: 20, mark: 85 },
+            { id: 2, name: "Mg Mg", age: 22, mark: 75 },
+            { id: 3, name: "Su Su", age: 19, mark: 90 },
+            { id: 4, name: "Hla Hla", age: 21, mark: 60 }
+            ];
+
+            // ------------------------------------------
+            // 1. Find highest mark
+            // ------------------------------------------
+            function findHighestMark(studentList) {
+            if (studentList.length === 0) return null;
+
+            let topStudent = studentList[0];
+            for (let i = 1; i < studentList.length; i++) {
+                if (studentList[i].mark > topStudent.mark) {
+                topStudent = studentList[i];
+                }
+            }
+            return topStudent;
+            }
+
+            const bestStudent = findHighestMark(students);
+            console.log(`1. Highest Mark: ${bestStudent.mark} (by ${bestStudent.name})`);
+
+
+            // ------------------------------------------
+            // 2. Find students older than 20
+            // ------------------------------------------
+            function getStudentsOlderThan(studentList, minAge) {
+            const result = [];
+            for (const student of studentList) {
+                if (student.age > minAge) {
+                result.push(student);
+                }
+            }
+            return result;
+            }
+
+            const olderStudents = getStudentsOlderThan(students, 20);
+            console.log("2. Students older than 20:", olderStudents);
+
+
+            // ------------------------------------------
+            // 3. Calculate average marks
+            // ------------------------------------------
+            function calculateAverageMark(studentList) {
+            if (studentList.length === 0) return 0;
+
+            let totalMarks = 0;
+            for (const student of studentList) {
+                totalMarks += student.mark;
+            }
+            return totalMarks / studentList.length;
+            }
+
+            const avgMark = calculateAverageMark(students);
+            console.log("3. Average Mark:", avgMark); // 77.5
+
+
+            // ------------------------------------------
+            // 4. Search student by ID
+            // ------------------------------------------
+            function findStudentById(studentList, searchId) {
+            for (const student of studentList) {
+                if (student.id === searchId) {
+                return student;
+                }
+            }
+            return null; // Not found
+            }
+
+            const foundStudent = findStudentById(students, 2);
+            const notFound = findStudentById(students, 99);
+            console.log("4. Search ID 2:", foundStudent ? foundStudent : "Student not found");
+            console.log("   Search ID 99:", notFound ? notFound : "Student not found");
+
+
+            // ------------------------------------------
+            // 5. Get all student names
+            // ------------------------------------------
+            function getAllStudentNames(studentList) {
+            const names = [];
+            for (const student of studentList) {
+                names.push(student.name);
+            }
+            return names;
+            }
+
+            const studentNames = getAllStudentNames(students);
+            console.log("5. All Student Names:", studentNames);
+
+
+            // ==========================================
+            // BONUS: Same 5 Tasks using Modern ES6 Array Methods
+            // (Preview for upcoming weeks: filter, find, map, reduce)
+            // ==========================================
+            console.log("\n--- BONUS: ES6 Shortcuts ---");
+            console.log("Highest:", students.reduce((max, s) => (s.mark > max.mark ? s : max), students[0]));
+            console.log("Older than 20:", students.filter(s => s.age > 20));
+            console.log("Average:", students.reduce((sum, s) => sum + s.mark, 0) / students.length);
+            console.log("Search ID 3:", students.find(s => s.id === 3));
+            console.log("All Names:", students.map(s => s.name));
+        </script>
+    </body>
+</html>

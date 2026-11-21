@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            const uniqueTags = new Set(["JS", "HTML", "CSS", "JS", "HTML"]);
+            uniqueTags.add("React");
+            uniqueTags.add("JS"); // Ignored because "JS" already exists
+
+            console.log("Set contents:", uniqueTags);
+            console.log("Size:", uniqueTags.size); // 4
+            console.log("Has 'CSS'?:", uniqueTags.has("CSS")); // true
+
+            uniqueTags.delete("HTML");
+            console.log("After deleting HTML:", [...uniqueTags]);
+
+            // Practical Use Case: Remove duplicates from an Array
+            const duplicateNumbers = [1, 2, 2, 3, 4, 4, 5, 1];
+            const cleanNumbers = [...new Set(duplicateNumbers)];
+            console.log("Duplicates removed:", cleanNumbers); // [1, 2, 3, 4, 5]
+
+
+            // --- B. MAP (Key-Value pairs; keys can be ANY type, preserves order) ---
+            const courseMap = new Map();
+
+            // Setting values with .set(key, value)
+            courseMap.set("JS101", { title: "JavaScript Basics", students: 40 });
+            courseMap.set("PY101", { title: "Python Basics", students: 35 });
+            courseMap.set(100, "Numeric Key Example"); // Numbers can be keys (unlike plain Objects!)
+
+            console.log("Get JS101:", courseMap.get("JS101"));
+            console.log("Has PY101?:", courseMap.has("PY101")); // true
+            console.log("Total entries:", courseMap.size);
+
+            // Looping through a Map using Destructuring
+            console.log("--- Iterating Map ---");
+            for (const [code, details] of courseMap) {
+            console.log(`Key: ${code} =>`, details);
+            }
+
+            courseMap.delete(100);
+            console.log("After delete 100, size:", courseMap.size);            
+        </script>
+    </body>
+</html>

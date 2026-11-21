@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 5: Object Properties & Methods
+            // ==========================================
+
+            // 1. Object with Methods & 'this' keyword
+            const bankAccount = {
+            owner: "Su Su",
+            balance: 1000,
+
+            // Method (Note: Use regular functions, NOT arrow functions, when using 'this')
+            deposit(amount) {
+                if (amount <= 0) {
+                console.log("Invalid deposit amount.");
+                return;
+                }
+                this.balance += amount; // 'this' refers to bankAccount
+                console.log(`Deposited $${amount}. New balance: $${this.balance}`);
+            },
+
+            withdraw(amount) {
+                if (amount > this.balance) {
+                console.log("Insufficient funds!");
+                return;
+                }
+                this.balance -= amount;
+                console.log(`Withdrew $${amount}. Remaining balance: $${this.balance}`);
+            }
+            };
+
+            bankAccount.deposit(500);
+            bankAccount.withdraw(300);
+            bankAccount.withdraw(2000);
+
+            // 2. Built-in Object Static Methods
+            const laptop = {
+            brand: "Dell",
+            ram: "16GB",
+            price: 1200
+            };
+
+            console.log("Keys:", Object.keys(laptop));       // ["brand", "ram", "price"]
+            console.log("Values:", Object.values(laptop));   // ["Dell", "16GB", 1200]
+            console.log("Entries:", Object.entries(laptop)); // [["brand", "Dell"], ...]
+
+            // 3. Looping through Object properties with for...in
+            console.log("--- Looping Object with for...in ---");
+            for (const key in laptop) {
+            console.log(`${key}: ${laptop[key]}`);
+            }           
+        </script>
+    </body>
+</html>

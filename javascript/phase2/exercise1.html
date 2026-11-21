@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 7: Project - Student Management System (Console-based)
+            // Uses: Map, Set, Template Literals, Destructuring, Spread, Rest, ?., ??
+            // ==========================================
+
+            // Database stored as a Map (Key: student ID, Value: Student Object)
+            const studentDB = new Map();
+
+            // 1. Add a Student (with validation, default values ??, and Set for courses)
+            function addStudent({ id, name, age, mark, contact = null, courses = [] }) {
+            if (!id || !name) {
+                console.log("❌ Error: Student ID and Name are required.");
+                return;
+            }
+            if (studentDB.has(id)) {
+                console.log(`❌ Error: Student with ID ${id} already exists.`);
+                return;
+            }
+
+            const newStudent = {
+                id,
+                name,
+                age: age ?? 18,
+                mark: mark ?? 0, // Preserves 0 if mark is 0
+                contact,
+                courses: new Set(courses) // Ensures unique courses
+            };
+
+            studentDB.set(id, newStudent);
+            console.log(`✅ Added student: ${name} (ID: ${id})`);
+            }
+
+            // 2. View All Students
+            function viewAllStudents() {
+            console.log("\n================ STUDENT LIST ================");
+            if (studentDB.size === 0) {
+                console.log("No students found in the system.");
+                return;
+            }
+
+            for (const [id, { name, age, mark, contact, courses }] of studentDB) {
+                const email = contact?.email ?? "No email";
+                const courseList = courses.size > 0 ? [...courses].join(", ") : "None";
+                console.log(
+                `[ID: ${id}] ${name} | Age: ${age} | Mark: ${mark} | Email: ${email} | Courses: ${courseList}`
+                );
+            }
+            console.log("==============================================\n");
+            }
+
+            // 3. Search Student by ID (Optional Chaining & Nullish Coalescing)
+            function getStudentById(id) {
+            const student = studentDB.get(id);
+            if (!student) {
+                console.log(`🔍 Search Result: Student ID ${id} not found.`);
+                return null;
+            }
+
+            const { name, mark, contact } = student;
+            const phone = contact?.phone ?? "N/A";
+            console.log(`🔍 Found -> ID: ${id}, Name: ${name}, Mark: ${mark}, Phone: ${phone}`);
+            return student;
+            }
+
+            // 4. Update Student Info (Spread Operator for immutable update)
+            function updateStudent(id, updates) {
+            const existing = studentDB.get(id);
+            if (!existing) {
+                console.log(`❌ Cannot update: Student ID ${id} not found.`);
+                return;
+            }
+
+            // Merge existing data with updates, keeping the original courses Set intact unless replaced
+            const updatedStudent = {
+                ...existing,
+                ...updates,
+                id: existing.id // Prevent accidentally overwriting ID
+            };
+
+            studentDB.set(id, updatedStudent);
+            console.log(`🔄 Updated Student ID ${id} (${updatedStudent.name}).`);
+            }
+
+            // 5. Enroll Student in Multiple Courses (Rest Parameters + Set)
+            function enrollCourses(id, ...newCourses) {
+            const student = studentDB.get(id);
+            if (!student) {
+                console.log(`❌ Cannot enroll: Student ID ${id} not found.`);
+                return;
+            }
+
+            for (const course of newCourses) {
+                student.courses.add(course);
+            }
+            console.log(`📚 Enrolled ${student.name} in: ${newCourses.join(", ")}`);
+            }
+
+            // 6. Delete Student
+            function deleteStudent(id) {
+            if (studentDB.delete(id)) {
+                console.log(`🗑️ Deleted student with ID ${id}.`);
+            } else {
+                console.log(`❌ Cannot delete: Student ID ${id} not found.`);
+            }
+            }
+
+            // 7. Show Class Statistics (Spread, Destructuring, Set)
+            function showStatistics() {
+            if (studentDB.size === 0) {
+                console.log("📊 No data for statistics.");
+                return;
+            }
+
+            const allStudents = [...studentDB.values()];
+            let totalMarks = 0;
+            let topStudent = allStudents[0];
+            const allUniqueCourses = new Set();
+
+            for (const student of allStudents) {
+                const { mark, courses } = student;
+                totalMarks += mark;
+                if (mark > topStudent.mark) {
+                topStudent = student;
+                }
+                for (const c of courses) {
+                allUniqueCourses.add(c);
+                }
+            }
+
+            const average = (totalMarks / allStudents.length).toFixed(2);
+
+            console.log(`
+            📊 === CLASS STATISTICS ===
+            Total Students  : ${allStudents.length}
+            Average Mark    : ${average}
+            Top Performer   : ${topStudent.name} (${topStudent.mark} marks)
+            Offered Courses : ${[...allUniqueCourses].join(", ")}
+            ===========================
+            `);
+            }
+
+
+            // ==========================================
+            // RUNNING THE SYSTEM (Demo Simulation)
+            // ==========================================
+
+            // Adding students
+            addStudent({
+            id: 1,
+            name: "Aung",
+            age: 20,
+            mark: 85,
+            contact: { email: "aung@mail.com", phone: "09111222" },
+            courses: ["JavaScript", "HTML"]
+            });
+
+            addStudent({
+            id: 2,
+            name: "Mg Mg",
+            age: 22,
+            mark: 0, // Tests Nullish Coalescing (??) with 0!
+            courses: ["CSS", "JavaScript", "CSS"] // Duplicate "CSS" auto-removed by Set
+            });
+
+            addStudent({
+            id: 3,
+            name: "Su Su",
+            age: 19,
+            mark: 92,
+            contact: { email: "susu@mail.com" }, // No phone provided
+            courses: ["JavaScript", "Node.js"]
+            });
+
+            // Trying duplicate ID
+            addStudent({ id: 1, name: "Duplicate User" });
+
+            // View initial list
+            viewAllStudents();
+
+            // Search students
+            getStudentById(3);
+            getStudentById(99);
+
+            // Update Mg Mg's mark and contact
+            updateStudent(2, { mark: 78, contact: { email: "mgmg@mail.com" } });
+
+            // Enroll Aung in multiple new courses using Rest Parameters
+            enrollCourses(1, "React", "Git", "JavaScript"); // "JavaScript" won't duplicate
+
+            // Delete a student? Let's test adding and deleting a temporary student
+            addStudent({ id: 4, name: "Temp Student", mark: 50 });
+            deleteStudent(4);
+
+            // Final View & Statistics
+            viewAllStudents();
+            showStatistics();            
+        </script>
+    </body>
+</html>

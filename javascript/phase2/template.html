@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            const studentName = "Aung Aung";
+            const score = 88;
+            const maxScore = 100;
+
+            // 1. String Interpolation (${...}) & Expressions inside ${...}
+            const message = `Student: ${studentName}
+            Score: ${score}/${maxScore} (${(score / maxScore) * 100}%)
+            Status: ${score >= 40 ? "Passed" : "Failed"}`;
+
+            // 2. Multi-line String (Preserves line breaks automatically without \n)
+            console.log(message);
+
+            // 3. Calling functions inside Template Literals
+            const toUpper = str => str.toUpperCase();
+            console.log(`Welcome back, ${toUpper(studentName)}!`);
+
+            // 4. Practical Example: Generating a formatted receipt
+            const item = "Mechanical Keyboard";
+            const price = 45;
+            const qty = 2;
+
+            const receipt = `
+            ========== RECEIPT ==========
+            Item     : ${item}
+            Quantity : ${qty}
+            Price    : $${price}
+            Total    : $${price * qty}
+            =============================
+            `;
+            console.log(receipt);           
+        </script>
+    </body>
+</html>

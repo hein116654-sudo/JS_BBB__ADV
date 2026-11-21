@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="my" data-theme="luxury">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>3D Sky Lantern & Fireworks Pro 🏮🎆</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- UI Theme Libraries: daisyUI v5 + Tailwind CSS v4 + Animate.css -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <!-- Three.js Import Map & GSAP -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Fredoka', 'Noto Sans Myanmar', sans-serif;
+      user-select: none;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .swipe-arrow {
+      animation: bounceUp 1.1s ease-in-out infinite;
+    }
+
+    @keyframes bounceUp {
+      0%, 100% { transform: translateY(0); opacity: 0.75; }
+      50% { transform: translateY(-14px); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 3D WebGL Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Top Bar -->
+  <header class="fixed top-4 left-4 right-4 z-20 flex items-center justify-between gap-2 pointer-events-none">
+    <div id="top-hint" class="pointer-events-auto badge badge-lg bg-base-100/75 text-base-content border border-primary/40 backdrop-blur-md shadow-lg text-xs py-3.5 px-4">
+      ✨ 3D မီးပုံးပျံကို လှည့်ကြည့်နိုင်ပါတယ်
+    </div>
+
+    <div class="pointer-events-auto flex items-center gap-2" id="creator-tools">
+      <button id="btn-cycle-theme" class="btn btn-circle btn-sm bg-base-100/80 border border-primary/40 backdrop-blur-md shadow-md text-base" title="Switch Theme">
+        🎨
+      </button>
+      <button id="open-customizer-btn" class="btn btn-circle btn-sm bg-base-100/80 border border-primary/40 backdrop-blur-md shadow-md text-base" title="Customer Link Generator">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <!-- Swipe Up Guide -->
+  <div id="swipe-guide" class="hidden fixed top-[18%] left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none">
+    <div class="swipe-arrow text-4xl drop-shadow-[0_0_12px_rgba(255,209,102,0.9)]">⬆️</div>
+    <div class="mt-1 badge badge-primary badge-outline bg-base-100/80 backdrop-blur-md py-3 px-4 font-semibold shadow-lg">
+      အပေါ်သို့ ဆွဲတင်ပြီး လွှတ်လိုက်ပါ
+    </div>
+  </div>
+
+  <!-- Bottom Interactive HUD (daisyUI Glass Card) -->
+  <main class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[92vw] max-w-[400px] z-20">
+    <div class="card bg-base-100/75 text-base-content backdrop-blur-xl border border-primary/35 shadow-2xl rounded-3xl">
+      <div class="card-body p-5 text-center gap-3">
+        <!-- Step Dots -->
+        <div class="flex justify-center gap-2">
+          <span id="dot-0" class="h-2 w-6 rounded-full bg-primary transition-all duration-300"></span>
+          <span id="dot-1" class="h-2 w-2 rounded-full bg-base-content/30 transition-all duration-300"></span>
+          <span id="dot-2" class="h-2 w-2 rounded-full bg-base-content/30 transition-all duration-300"></span>
+        </div>
+
+        <p id="status-text" class="text-sm leading-relaxed font-medium">
+          မီးပုံးပျံလေးပေါ်မှာ ဆုတောင်းစာရေးပြီး မီးညှိကြမယ် 🏮✨
+        </p>
+
+        <!-- Step 1: Write Wish + Ignite -->
+        <div id="step-1-controls" class="flex flex-col gap-2.5">
+          <input
+            type="text"
+            id="quick-wish-input"
+            maxlength="35"
+            placeholder="ဆုတောင်းတိုလေး ရေးပါ (ဥပမာ - အမြဲပျော်ပါစေ)"
+            class="input input-bordered input-primary w-full text-center text-sm bg-base-200/60 rounded-2xl"
+          />
+          <button id="btn-ignite" class="btn btn-primary w-full rounded-2xl text-base shadow-lg">
+            🔥 မီးညှိပြီး ဆုတောင်းမယ်
+          </button>
+        </div>
+
+        <!-- Step 2: Release Button -->
+        <div id="step-2-controls" class="hidden flex flex-col gap-2">
+          <button id="btn-release" class="btn btn-primary w-full rounded-2xl text-base shadow-lg">
+            🏮 ကောင်းကင်ပေါ် လွှတ်တင်မယ်
+          </button>
+        </div>
+
+        <!-- Step 3: Finale Controls -->
+        <div id="step-3-controls" class="hidden flex flex-col gap-2">
+          <button id="btn-show-card" class="btn btn-primary w-full rounded-2xl text-base shadow-lg">
+            💌 ဆုတောင်းစာ ဖတ်မယ်
+          </button>
+          <button id="btn-extra-firework" class="btn btn-outline btn-secondary w-full rounded-2xl text-sm">
+            🎆 မီးရှူးမီးပန်း ထပ်ဖောက်မယ်
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Glowing Sky Wish Card Modal -->
+  <div id="wish-backdrop" class="hidden fixed inset-0 z-30 flex items-center justify-center bg-black/70 backdrop-blur-md p-5">
+    <div id="sky-wish-card" class="relative card w-full max-w-[390px] bg-base-100/95 text-base-content border-2 border-primary/60 shadow-[0_0_50px_rgba(255,180,80,0.3)] rounded-3xl animate__animated">
+      <div id="display-occasion" class="badge badge-primary badge-lg absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-3.5 font-bold shadow-lg whitespace-nowrap">
+        ✨ SPECIAL WISH ✨
+      </div>
+
+      <div class="card-body pt-9 pb-6 px-6 text-center items-center gap-3">
+        <div class="text-4xl animate__animated animate__pulse animate__infinite">🏮🎆💖</div>
+        <h1 class="text-2xl font-bold text-primary">
+          For <span id="display-to">Chit Thu</span>
+        </h1>
+        <p id="display-msg" class="text-sm leading-7 bg-base-200/75 p-4 rounded-2xl border border-base-content/10 w-full">
+          ဒီမီးပုံးပျံလေး ကောင်းကင်ပေါ် လွင့်တက်သွားသလိုပဲ မင်းရဲ့ဆုတောင်းတွေအားလုံး အမြင့်ဆုံးထိ ပြည့်ဝပါစေနော်! ✨🌙
+        </p>
+        <div id="user-lantern-wish" class="text-xs text-secondary font-semibold italic empty:hidden"></div>
+        <div class="text-sm font-semibold opacity-85">
+          With love, <span id="display-from" class="text-primary">Casper</span> 💌
+        </div>
+
+        <div class="flex flex-col gap-2 w-full mt-2">
+          <button id="btn-watch-sky" class="btn btn-outline btn-secondary w-full rounded-2xl btn-sm h-11">
+            🎆 ကောင်းကင်ပြန်ကြည့်မယ်
+          </button>
+          <button id="btn-replay" class="btn btn-primary w-full rounded-2xl h-12 text-base">
+            🔄 အစကနေ ပြန်လွှတ်မယ်
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seller / Reseller Link Generator Modal -->
+  <div id="customizer-backdrop" class="hidden fixed inset-0 z-40 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+    <div class="card w-full max-w-[400px] max-h-[90vh] overflow-y-auto bg-base-100 text-base-content border border-primary/40 shadow-2xl rounded-3xl">
+      <div class="card-body p-6 gap-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold text-primary">🛠️ Customer Link ထုတ်ရန်</h2>
+          <button id="close-customizer-btn" class="btn btn-ghost btn-circle btn-sm">✕</button>
+        </div>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs mb-1 opacity-80">အခမ်းအနား / ခေါင်းစဉ် (Occasion)</span>
+          <select id="input-occasion" class="select select-bordered select-sm w-full rounded-xl">
+            <option value="✨ HAPPY BIRTHDAY ✨">🎂 Happy Birthday</option>
+            <option value="🏮 HAPPY TAZAUNGDAING 🏮">🏮 တန်ဆောင်တိုင် မီးထွန်းပွဲ</option>
+            <option value="🎆 HAPPY NEW YEAR 🎆">🎆 Happy New Year</option>
+            <option value="💖 HAPPY ANNIVERSARY 💖">💖 Happy Anniversary</option>
+            <option value="💌 FOR MY CRUSH 💌">💌 Crush / Confession</option>
+          </select>
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs mb-1 opacity-80">UI & Sky Theme ရွေးရန်</span>
+          <select id="input-theme" class="select select-bordered select-sm w-full rounded-xl">
+            <option value="luxury">✨ Luxury Gold (ရွှေနဲ့အနက်)</option>
+            <option value="valentine">🌸 Valentine Rose (ပန်းရောင်)</option>
+            <option value="synthwave">💜 Synthwave Neon (ခရမ်းနီယွန်)</option>
+            <option value="night">🌌 Midnight Sky (ညအပြာရောင်)</option>
+          </select>
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs mb-1 opacity-80">လက်ခံမည့်သူ နာမည် (To)</span>
+          <input type="text" id="input-to" placeholder="ဥပမာ - Su Myat" class="input input-bordered input-sm w-full rounded-xl" />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs mb-1 opacity-80">ပို့သူ နာမည် (From)</span>
+          <input type="text" id="input-from" placeholder="ဥပမာ - Ko Ko" class="input input-bordered input-sm w-full rounded-xl" />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs mb-1 opacity-80">မွေးနေ့/ဆုတောင်းစာ (Message)</span>
+          <textarea id="input-msg" rows="3" placeholder="ဆုတောင်းစာ ရေးပါ..." class="textarea textarea-bordered w-full rounded-xl text-sm"></textarea>
+        </label>
+
+        <button id="btn-generate-link" class="btn btn-primary w-full rounded-2xl mt-1">
+          🔗 Link ထုတ်ပြီး Copy ကူးမယ်
+        </button>
+        <p id="copy-feedback" class="text-xs text-success text-center break-all min-h-[18px]"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+    import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+    // ==========================================
+    // 1. Themes & URL Config
+    // ==========================================
+    const params = new URLSearchParams(window.location.search);
+
+    const THEME_PRESETS = {
+      luxury: {
+        daisy: 'luxury',
+        skyHex: 0x06050c,
+        topColor: '#ff7b00',
+        midColor: '#ffaa00',
+        botColor: '#ffe169',
+        glowHex: 0xffaa2b,
+        borderColor: '#5c1f00',
+        textColor: '#2e0d00',
+        palettes: [
+          [0xffd166, 0xff9f1c, 0xffffff],
+          [0xffb703, 0xfb8500, 0xffe8a3]
+        ]
+      },
+      valentine: {
+        daisy: 'valentine',
+        skyHex: 0x160516,
+        topColor: '#d90452',
+        midColor: '#ff4d8d',
+        botColor: '#ffc2d9',
+        glowHex: 0xff4d8d,
+        borderColor: '#5e0023',
+        textColor: '#360013',
+        palettes: [
+          [0xff4d8d, 0xffccd5, 0xffd166],
+          [0xff758f, 0xffffff, 0xffb3c1]
+        ]
+      },
+      synthwave: {
+        daisy: 'synthwave',
+        skyHex: 0x0e0424,
+        topColor: '#6a00f4',
+        midColor: '#b5179e',
+        botColor: '#ff85e4',
+        glowHex: 0xd946ef,
+        borderColor: '#2b0057',
+        textColor: '#1f003d',
+        palettes: [
+          [0xf72585, 0x4cc9f0, 0xffd166],
+          [0xb5179e, 0x7209b7, 0x00f5d4]
+        ]
+      },
+      night: {
+        daisy: 'night',
+        skyHex: 0x04091a,
+        topColor: '#ff8800',
+        midColor: '#ffbe0b',
+        botColor: '#fff0a6',
+        glowHex: 0xffbe0b,
+        borderColor: '#4f2200',
+        textColor: '#2b1000',
+        palettes: [
+          [0x38bdf8, 0xffd166, 0xffffff],
+          [0x818cf8, 0xf472b6, 0x34d399]
+        ]
+      }
+    };
+
+    const themeOrder = ['luxury', 'valentine', 'synthwave', 'night'];
+    const config = {
+      occasion: params.get('occasion') || '✨ SPECIAL WISH ✨',
+      to: params.get('to') || 'Chit Thu',
+      from: params.get('from') || 'Casper',
+      msg: params.get('msg') || 'ဒီမီးပုံးပျံလေး ကောင်းကင်ပေါ် လွင့်တက်သွားသလိုပဲ မင်းရဲ့ဆုတောင်းတွေအားလုံး အမြင့်ဆုံးထိ ပြည့်ဝပါစေနော်! ✨🌙',
+      theme: THEME_PRESETS[params.get('theme')] ? params.get('theme') : 'luxury'
+    };
+
+    if (params.get('gift') === '1') {
+      document.getElementById('creator-tools').classList.add('hidden');
+    }
+
+    function applyTextToUI() {
+      document.getElementById('display-occasion').textContent = config.occasion;
+      document.getElementById('display-to').textContent = config.to;
+      document.getElementById('display-from').textContent = config.from;
+      document.getElementById('display-msg').textContent = config.msg;
+    }
+    applyTextToUI();
+
+    // ==========================================
+    // 2. Web Audio API (Chime & Firework Boom)
+    // ==========================================
+    let audioCtx = null;
+    function ensureAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AC();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playChimeSound() {
+      try {
+        ensureAudio();
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.08);
+          gain.gain.setValueAtTime(0.001, audioCtx.currentTime + i * 0.08);
+          gain.gain.linearRampToValueAtTime(0.11, audioCtx.currentTime + i * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.08 + 0.5);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + i * 0.08);
+          osc.stop(audioCtx.currentTime + i * 0.08 + 0.55);
+        });
+      } catch (e) {}
+    }
+
+    function playFireworkSound() {
+      try {
+        ensureAudio();
+        const osc = audioCtx.createOscillator();
+        const oGain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(32, audioCtx.currentTime + 0.25);
+        oGain.gain.setValueAtTime(0.28, audioCtx.currentTime);
+        oGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+        osc.connect(oGain);
+        oGain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+
+        const bufferSize = audioCtx.sampleRate * 0.5;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.13));
+        }
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 1100;
+        const nGain = audioCtx.createGain();
+        nGain.gain.setValueAtTime(0.22, audioCtx.currentTime);
+        nGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        noise.connect(filter);
+        filter.connect(nGain);
+        nGain.connect(audioCtx.destination);
+        noise.start();
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 3. Three.js Scene + UnrealBloomPass Pipeline
+    // ==========================================
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const initialPreset = THEME_PRESETS[config.theme];
+    scene.background = new THREE.Color(initialPreset.skyHex);
+    scene.fog = new THREE.FogExp2(initialPreset.skyHex, 0.016);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 160);
+    camera.position.set(0, 2.3, 6.4);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    container.appendChild(renderer.domElement);
+
+    // Post-processing Composer with UnrealBloomPass!
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      0.68, // Bloom strength
+      0.45, // Bloom radius
+      0.55  // Threshold so text stays crisp while flames/fireworks glow!
+    );
+    composer.addPass(bloomPass);
+    composer.addPass(new OutputPass());
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.enablePan = false;
+    controls.minDistance = 4;
+    controls.maxDistance = 12;
+    controls.maxPolarAngle = Math.PI / 2 - 0.03;
+    controls.target.set(0, 1.8, 0);
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0x4a4d8f, 0.85));
+    const moonLight = new THREE.DirectionalLight(0xc7d2fe, 0.75);
+    moonLight.position.set(-10, 18, -20);
+    scene.add(moonLight);
+
+    // Glowing Moon
+    const moonGroup = new THREE.Group();
+    moonGroup.position.set(-10, 16, -42);
+    moonGroup.add(new THREE.Mesh(
+      new THREE.SphereGeometry(2.3, 32, 32),
+      new THREE.MeshBasicMaterial({ color: 0xfff8dc })
+    ));
+    moonGroup.add(new THREE.Mesh(
+      new THREE.SphereGeometry(3.3, 32, 32),
+      new THREE.MeshBasicMaterial({ color: 0xffe49e, transparent: true, opacity: 0.14 })
+    ));
+    scene.add(moonGroup);
+
+    // Starfield
+    const starCount = 550;
+    const starGeo = new THREE.BufferGeometry();
+    const starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+      starPos[i * 3] = (Math.random() - 0.5) * 95;
+      starPos[i * 3 + 1] = 2 + Math.random() * 45;
+      starPos[i * 3 + 2] = -8 - Math.random() * 65;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2, transparent: true, opacity: 0.85 });
+    scene.add(new THREE.Points(starGeo, starMat));
+
+    // Reflecting Night Lake
+    const lake = new THREE.Mesh(
+      new THREE.PlaneGeometry(140, 140),
+      new THREE.MeshStandardMaterial({ color: 0x050816, roughness: 0.1, metalness: 0.9 })
+    );
+    lake.rotation.x = -Math.PI / 2;
+    scene.add(lake);
+
+    // Distant Mountain Silhouettes
+    const mountainMat = new THREE.MeshBasicMaterial({ color: 0x050512 });
+    for (let i = 0; i < 14; i++) {
+      const w = 10 + Math.random() * 14;
+      const h = 3 + Math.random() * 5.5;
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(w, h, 5), mountainMat);
+      cone.position.set(-48 + i * 7.5, h / 2 - 0.2, -38 - Math.random() * 10);
+      scene.add(cone);
+    }
+
+    // Firework Glow Sprite
+    function createGlowSprite() {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0, 'rgba(255,255,255,1)');
+      g.addColorStop(0.28, 'rgba(255,255,255,0.85)');
+      g.addColorStop(0.65, 'rgba(255,255,255,0.2)');
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+    const glowSprite = createGlowSprite();
+
+    // ==========================================
+    // 4. 3D Sky Lantern + Dynamic Text
+    // ==========================================
+    const lanternGroup = new THREE.Group();
+    lanternGroup.position.set(0, 1.55, 0);
+    scene.add(lanternGroup);
+
+    let lanternBodyMat = null;
+    let lanternFlameGroup = null;
+    let lanternLight = null;
+    let userWishText = '';
+
+    function createLanternTexture(themeKey, toName, wishLine) {
+      const th = THEME_PRESETS[themeKey];
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+
+      const grad = ctx.createLinearGradient(0, 0, 0, 512);
+      grad.addColorStop(0, th.topColor);
+      grad.addColorStop(0.55, th.midColor);
+      grad.addColorStop(1, th.botColor);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1024, 512);
+
+      ctx.strokeStyle = 'rgba(100, 20, 0, 0.22)';
+      ctx.lineWidth = 4;
+      for (let x = 0; x <= 1024; x += 128) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 512);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = th.borderColor;
+      ctx.fillRect(0, 0, 1024, 24);
+      ctx.fillRect(0, 488, 1024, 24);
+
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(330, 110, 364, 280);
+
+      ctx.fillStyle = th.textColor;
+      ctx.font = 'bold 48px "Fredoka", "Noto Sans Myanmar", sans-serif';
+      ctx.fillText(`To: ${toName}`, 512, 200, 330);
+
+      ctx.font = '600 30px "Fredoka", "Noto Sans Myanmar", sans-serif';
+      ctx.fillText(wishLine || '✨ Make a Wish ✨', 512, 280, 330);
+
+      ctx.font = '34px sans-serif';
+      ctx.fillText('💛🏮💛', 512, 345);
+      ctx.restore();
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    function buildHeroLantern() {
+      while (lanternGroup.children.length > 0) {
+        lanternGroup.remove(lanternGroup.children[0]);
+      }
+      const th = THEME_PRESETS[config.theme];
+      const tex = createLanternTexture(config.theme, config.to, userWishText);
+
+      lanternBodyMat = new THREE.MeshStandardMaterial({
+        map: tex,
+        emissive: new THREE.Color(th.glowHex),
+        emissiveMap: tex,
+        emissiveIntensity: 0.35,
+        roughness: 0.6,
+        side: THREE.DoubleSide
+      });
+
+      const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.56, 1.85, 8, 1, true), lanternBodyMat);
+      bodyMesh.rotation.y = Math.PI;
+      lanternGroup.add(bodyMesh);
+
+      const topCap = new THREE.Mesh(new THREE.CircleGeometry(0.95, 8), lanternBodyMat);
+      topCap.rotation.x = -Math.PI / 2;
+      topCap.position.y = 0.925;
+      lanternGroup.add(topCap);
+
+      const wireMat = new THREE.MeshStandardMaterial({ color: 0x3b2314, metalness: 0.5, roughness: 0.5 });
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(0.56, 0.025, 8, 24), wireMat);
+      rim.rotation.x = Math.PI / 2;
+      rim.position.y = -0.92;
+      lanternGroup.add(rim);
+
+      const bar1 = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 1.12, 8), wireMat);
+      bar1.rotation.z = Math.PI / 2;
+      bar1.position.y = -0.92;
+      lanternGroup.add(bar1);
+      const bar2 = bar1.clone();
+      bar2.rotation.y = Math.PI / 2;
+      lanternGroup.add(bar2);
+
+      const burner = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.11, 0.13, 0.07, 12),
+        new THREE.MeshStandardMaterial({ color: 0x2a1810 })
+      );
+      burner.position.y = -0.89;
+      lanternGroup.add(burner);
+
+      lanternFlameGroup = new THREE.Group();
+      lanternFlameGroup.position.y = -0.78;
+      lanternFlameGroup.scale.set(0, 0, 0);
+
+      const outerFlame = new THREE.Mesh(
+        new THREE.SphereGeometry(0.11, 14, 14),
+        new THREE.MeshBasicMaterial({ color: 0xff9900 })
+      );
+      outerFlame.scale.set(0.85, 1.85, 0.85);
+      lanternFlameGroup.add(outerFlame);
+
+      const innerFlame = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+      );
+      innerFlame.scale.set(0.75, 1.5, 0.75);
+      lanternFlameGroup.add(innerFlame);
+      lanternGroup.add(lanternFlameGroup);
+
+      lanternLight = new THREE.PointLight(th.glowHex, 0.4, 20);
+      lanternLight.position.y = -0.4;
+      lanternGroup.add(lanternLight);
+    }
+
+    buildHeroLantern();
+
+    function applyTheme(themeKey) {
+      config.theme = themeKey;
+      const th = THEME_PRESETS[themeKey];
+      document.documentElement.setAttribute('data-theme', th.daisy);
+      scene.background.setHex(th.skyHex);
+      scene.fog.color.setHex(th.skyHex);
+
+      if (lanternBodyMat) {
+        const tex = createLanternTexture(themeKey, config.to, userWishText);
+        lanternBodyMat.map = tex;
+        lanternBodyMat.emissiveMap = tex;
+        lanternBodyMat.emissive.setHex(th.glowHex);
+        lanternBodyMat.needsUpdate = true;
+      }
+      if (lanternLight) lanternLight.color.setHex(th.glowHex);
+    }
+
+    applyTheme(config.theme);
+
+    // Background Floating Lanterns
+    const bgLanterns = [];
+    function spawnBackgroundLanterns() {
+      const th = THEME_PRESETS[config.theme];
+      for (let i = 0; i < 18; i++) {
+        const g = new THREE.Group();
+        const mesh = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.28, 0.17, 0.55, 6),
+          new THREE.MeshBasicMaterial({ color: th.glowHex })
+        );
+        g.add(mesh);
+        g.position.set((Math.random() - 0.5) * 36, 0.6 + Math.random() * 6, -8 - Math.random() * 24);
+        scene.add(g);
+        bgLanterns.push({ mesh: g, speedY: 0.015 + Math.random() * 0.025, swayOffset: Math.random() * Math.PI * 2 });
+      }
+    }
+
+    // ==========================================
+    // 5. 3D Fireworks & Heart Explosion
+    // ==========================================
+    const fireworks = [];
+
+    function launchFirework(targetX, targetY, targetZ, isHeart = false) {
+      const rocket = new THREE.Mesh(
+        new THREE.SphereGeometry(0.09, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xfff0b3 })
+      );
+      rocket.position.set(targetX + (Math.random() - 0.5) * 1.4, 0.1, targetZ);
+      scene.add(rocket);
+
+      gsap.to(rocket.position, {
+        x: targetX,
+        y: targetY,
+        z: targetZ,
+        duration: 0.65,
+        ease: 'power2.out',
+        onComplete: () => {
+          scene.remove(rocket);
+          explodeFirework(targetX, targetY, targetZ, isHeart);
+        }
+      });
+    }
+
+    function explodeFirework(cx, cy, cz, isHeart = false) {
+      playFireworkSound();
+      const palettes = THEME_PRESETS[config.theme].palettes;
+      const palette = palettes[Math.floor(Math.random() * palettes.length)];
+      const count = isHeart ? 130 : 105;
+      const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+      const velocities = [];
+
+      for (let i = 0; i < count; i++) {
+        positions[i * 3] = cx;
+        positions[i * 3 + 1] = cy;
+        positions[i * 3 + 2] = cz;
+
+        const c = new THREE.Color(isHeart ? (i % 2 === 0 ? 0xff4d8d : 0xffd166) : palette[i % palette.length]);
+        colors[i * 3] = c.r;
+        colors[i * 3 + 1] = c.g;
+        colors[i * 3 + 2] = c.b;
+
+        if (isHeart) {
+          const t = (i / count) * Math.PI * 2;
+          const hx = 16 * Math.pow(Math.sin(t), 3);
+          const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+          velocities.push(new THREE.Vector3(hx * 0.011, hy * 0.011, (Math.random() - 0.5) * 0.025));
+        } else {
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          const speed = 0.075 + Math.random() * 0.125;
+          velocities.push(new THREE.Vector3(
+            speed * Math.sin(phi) * Math.cos(theta),
+            speed * Math.sin(phi) * Math.sin(theta),
+            speed * Math.cos(phi)
+          ));
+        }
+      }
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const mat = new THREE.PointsMaterial({
+        size: isHeart ? 0.6 : 0.48,
+        map: glowSprite,
+        vertexColors: true,
+        transparent: true,
+        opacity: 1,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const points = new THREE.Points(geo, mat);
+      scene.add(points);
+
+      const flashLight = new THREE.PointLight(palette[0], 7, 38);
+      flashLight.position.set(cx, cy, cz);
+      scene.add(flashLight);
+
+      fireworks.push({
+        points,
+        mat,
+        velocities,
+        flashLight,
+        life: 1.0,
+        gravity: isHeart ? 0.0012 : 0.0022
+      });
+    }
+
+    // ==========================================
+    // 6. Interactive Flow & Events
+    // ==========================================
+    let state = 'READY';
+    const dot0 = document.getElementById('dot-0');
+    const dot1 = document.getElementById('dot-1');
+    const dot2 = document.getElementById('dot-2');
+    const statusText = document.getElementById('status-text');
+    const step1Controls = document.getElementById('step-1-controls');
+    const step2Controls = document.getElementById('step-2-controls');
+    const step3Controls = document.getElementById('step-3-controls');
+    const swipeGuide = document.getElementById('swipe-guide');
+    const wishBackdrop = document.getElementById('wish-backdrop');
+    const skyWishCard = document.getElementById('sky-wish-card');
+
+    function setActiveDot(step) {
+      [dot0, dot1, dot2].forEach((d, idx) => {
+        if (idx === step) {
+          d.className = 'h-2 w-6 rounded-full bg-primary transition-all duration-300';
+        } else {
+          d.className = 'h-2 w-2 rounded-full bg-base-content/30 transition-all duration-300';
+        }
+      });
+    }
+
+    // Quick Theme Switch Button
+    document.getElementById('btn-cycle-theme').addEventListener('click', () => {
+      const idx = (themeOrder.indexOf(config.theme) + 1) % themeOrder.length;
+      applyTheme(themeOrder[idx]);
+      playChimeSound();
+    });
+
+    // Live wish typing on 3D lantern
+    document.getElementById('quick-wish-input').addEventListener('input', (e) => {
+      userWishText = e.target.value.trim();
+      applyTheme(config.theme);
+    });
+
+    // Step 1: Ignite
+    document.getElementById('btn-ignite').addEventListener('click', () => {
+      if (state !== 'READY') return;
+      state = 'LIT';
+      playChimeSound();
+
+      gsap.to(lanternGroup.rotation, { y: 0, duration: 0.7, ease: 'power2.out' });
+      gsap.to(lanternFlameGroup.scale, { x: 1, y: 1, z: 1, duration: 0.6, ease: 'back.out(2)' });
+      gsap.to(lanternLight, { intensity: 4.5, duration: 0.8 });
+      gsap.to(lanternBodyMat, { emissiveIntensity: 0.95, duration: 0.8 });
+
+      step1Controls.classList.add('hidden');
+      step2Controls.classList.remove('hidden');
+      swipeGuide.classList.remove('hidden');
+      setActiveDot(1);
+      statusText.textContent = 'မီးပုံးပျံလေး လင်းလာပြီ! Screen ကို အပေါ်သို့ ဆွဲတင်ပြီး လွှတ်လိုက်ပါ ⬆️🏮';
+      controls.enableRotate = false;
+    });
+
+    // Step 2: Swipe Up OR Tap Button
+    let pointerStartY = null;
+    window.addEventListener('pointerdown', (e) => {
+      if (state === 'LIT') pointerStartY = e.clientY;
+    });
+    window.addEventListener('pointerup', (e) => {
+      if (state === 'LIT' && pointerStartY !== null) {
+        if (pointerStartY - e.clientY > 50) releaseLantern();
+        pointerStartY = null;
+      }
+    });
+    document.getElementById('btn-release').addEventListener('click', releaseLantern);
+
+    function releaseLantern() {
+      if (state !== 'LIT') return;
+      state = 'FLYING';
+      controls.enableRotate = true;
+
+      swipeGuide.classList.add('hidden');
+      step2Controls.classList.add('hidden');
+      setActiveDot(2);
+      statusText.textContent = 'မီးပုံးပျံလေး ကောင်းကင်ပေါ် ပျံတက်နေပြီ... ✨🌙';
+      playChimeSound();
+
+      spawnBackgroundLanterns();
+
+      gsap.to(lanternGroup.position, { y: 11.5, z: -9, duration: 4.2, ease: 'power1.inOut' });
+      gsap.to(controls.target, { y: 8.5, z: -6, duration: 4.0, ease: 'power1.inOut' });
+      gsap.to(camera.position, { y: 5.5, z: 8.5, duration: 4.0, ease: 'power1.inOut' });
+
+      setTimeout(() => launchFirework(-3.8, 10.5, -10, false), 1500);
+      setTimeout(() => launchFirework(4.0, 11.2, -11, false), 2200);
+      setTimeout(() => launchFirework(0, 12.2, -9.5, true), 3100);
+      setTimeout(() => launchFirework(-2.5, 13.0, -13, false), 3700);
+      setTimeout(() => launchFirework(2.8, 12.6, -13, false), 4100);
+
+      setTimeout(() => {
+        state = 'FINALE';
+        step3Controls.classList.remove('hidden');
+        statusText.textContent = 'ကောင်းကင်ကို လက်နဲ့တို့ပြီး မီးရှူးမီးပန်း ထပ်ဖောက်နိုင်ပါတယ်! 🎆✨';
+        document.getElementById('top-hint').textContent = '🎆 ကောင်းကင်ကို ထောက်ပြီး မီးရှူးဖောက်ပါ';
+        openWishCard();
+      }, 4800);
+    }
+
+    function openWishCard() {
+      const noteEl = document.getElementById('user-lantern-wish');
+      noteEl.textContent = userWishText ? `🏮 Lantern Wish: "${userWishText}"` : '';
+      wishBackdrop.classList.remove('hidden');
+      skyWishCard.classList.remove('animate__zoomInDown');
+      void skyWishCard.offsetWidth;
+      skyWishCard.classList.add('animate__zoomInDown');
+    }
+
+    document.getElementById('btn-show-card').addEventListener('click', openWishCard);
+    document.getElementById('btn-watch-sky').addEventListener('click', () => {
+      wishBackdrop.classList.add('hidden');
+    });
+
+    document.getElementById('btn-extra-firework').addEventListener('click', () => {
+      launchFirework((Math.random() - 0.5) * 10, 8.5 + Math.random() * 5, -8 - Math.random() * 6, Math.random() > 0.6);
+    });
+
+    // Tap Sky to launch fireworks during FINALE
+    let tapDown = { x: 0, y: 0 };
+    renderer.domElement.addEventListener('pointerdown', (e) => { tapDown = { x: e.clientX, y: e.clientY }; });
+    renderer.domElement.addEventListener('pointerup', (e) => {
+      if (state !== 'FINALE') return;
+      if (Math.hypot(e.clientX - tapDown.x, e.clientY - tapDown.y) > 8) return;
+      const ndcX = (e.clientX / window.innerWidth) * 2 - 1;
+      const ndcY = -(e.clientY / window.innerHeight) * 2 + 1;
+      const vec = new THREE.Vector3(ndcX, ndcY, 0.5).unproject(camera);
+      const dir = vec.sub(camera.position).normalize();
+      const target = camera.position.clone().add(dir.multiplyScalar(16));
+      launchFirework(target.x, Math.max(5.5, target.y), target.z, Math.random() > 0.72);
+    });
+
+    // Replay
+    document.getElementById('btn-replay').addEventListener('click', () => {
+      wishBackdrop.classList.add('hidden');
+      state = 'READY';
+      setActiveDot(0);
+      bgLanterns.forEach(l => scene.remove(l.mesh));
+      bgLanterns.length = 0;
+      lanternGroup.position.set(0, 1.55, 0);
+      lanternGroup.rotation.set(0, 0, 0);
+      lanternFlameGroup.scale.set(0, 0, 0);
+      lanternLight.intensity = 0.4;
+      lanternBodyMat.emissiveIntensity = 0.35;
+      controls.enableRotate = true;
+      controls.target.set(0, 1.8, 0);
+      camera.position.set(0, 2.3, 6.4);
+      step1Controls.classList.remove('hidden');
+      step2Controls.classList.add('hidden');
+      step3Controls.classList.add('hidden');
+      swipeGuide.classList.add('hidden');
+      document.getElementById('top-hint').textContent = '✨ 3D မီးပုံးပျံကို လှည့်ကြည့်နိုင်ပါတယ်';
+      statusText.textContent = 'မီးပုံးပျံလေးပေါ်မှာ ဆုတောင်းစာရေးပြီး မီးညှိကြမယ် 🏮✨';
+    });
+
+    // ==========================================
+    // 7. Seller Customizer Modal
+    // ==========================================
+    const customizerBackdrop = document.getElementById('customizer-backdrop');
+    document.getElementById('open-customizer-btn').addEventListener('click', () => {
+      document.getElementById('input-occasion').value = config.occasion;
+      document.getElementById('input-theme').value = config.theme;
+      document.getElementById('input-to').value = config.to;
+      document.getElementById('input-from').value = config.from;
+      document.getElementById('input-msg').value = config.msg;
+      document.getElementById('copy-feedback').textContent = '';
+      customizerBackdrop.classList.remove('hidden');
+    });
+
+    document.getElementById('close-customizer-btn').addEventListener('click', () => {
+      customizerBackdrop.classList.add('hidden');
+    });
+
+    document.getElementById('btn-generate-link').addEventListener('click', async () => {
+      config.occasion = document.getElementById('input-occasion').value;
+      config.theme = document.getElementById('input-theme').value;
+      config.to = document.getElementById('input-to').value.trim() || 'Chit Thu';
+      config.from = document.getElementById('input-from').value.trim() || 'Casper';
+      config.msg = document.getElementById('input-msg').value.trim() || config.msg;
+
+      applyTextToUI();
+      applyTheme(config.theme);
+
+      const url = new URL(window.location.href.split('?')[0]);
+      url.searchParams.set('occasion', config.occasion);
+      url.searchParams.set('theme', config.theme);
+      url.searchParams.set('to', config.to);
+      url.searchParams.set('from', config.from);
+      url.searchParams.set('msg', config.msg);
+      url.searchParams.set('gift', '1');
+
+      try {
+        await navigator.clipboard.writeText(url.toString());
+        document.getElementById('copy-feedback').textContent = '✅ Customer Link ကို Copy ကူးပြီးပါပြီ!';
+      } catch {
+        document.getElementById('copy-feedback').textContent = url.toString();
+      }
+    });
+
+    // ==========================================
+    // 8. Animation Loop
+    // ==========================================
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      if (state === 'READY' || state === 'LIT') {
+        lanternGroup.position.y = 1.55 + Math.sin(t * 1.6) * 0.08;
+        lanternGroup.rotation.z = Math.sin(t * 1.1) * 0.03;
+      } else {
+        lanternGroup.rotation.z = Math.sin(t * 1.3) * 0.05;
+        lanternGroup.rotation.y += 0.004;
+      }
+
+      if (state !== 'READY' && lanternFlameGroup) {
+        const flick = 0.92 + Math.sin(t * 20) * 0.1 + Math.cos(t * 29) * 0.06;
+        lanternFlameGroup.scale.set(flick, flick * 1.05, flick);
+        lanternLight.intensity = 4.0 + Math.sin(t * 18) * 0.6;
+      }
+
+      for (let i = 0; i < bgLanterns.length; i++) {
+        const l = bgLanterns[i];
+        l.mesh.position.y += l.speedY;
+        l.mesh.position.x += Math.sin(t + l.swayOffset) * 0.008;
+        if (l.mesh.position.y > 26) l.mesh.position.y = 0.5;
+      }
+
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        const fw = fireworks[i];
+        const posAttr = fw.points.geometry.attributes.position;
+        for (let j = 0; j < fw.velocities.length; j++) {
+          const v = fw.velocities[j];
+          v.y -= fw.gravity;
+          v.multiplyScalar(0.985);
+          posAttr.array[j * 3] += v.x;
+          posAttr.array[j * 3 + 1] += v.y;
+          posAttr.array[j * 3 + 2] += v.z;
+        }
+        posAttr.needsUpdate = true;
+
+        fw.life -= 0.013;
+        fw.mat.opacity = Math.max(0, fw.life);
+        fw.flashLight.intensity = Math.max(0, fw.life * 5.5);
+
+        if (fw.life <= 0) {
+          scene.remove(fw.points);
+          scene.remove(fw.flashLight);
+          fw.points.geometry.dispose();
+          fw.mat.dispose();
+          fireworks.splice(i, 1);
+        }
+      }
+
+      starMat.opacity = 0.72 + Math.sin(t * 1.5) * 0.18;
+
+      controls.update();
+      composer.render();
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
+      bloomPass.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            const numbers = [1, 2, 3, 4, 5];
+
+            const doubled = numbers.map(num => num * 2);
+            console.log("Original:", numbers); // [1, 2, 3, 4, 5] (Unchanged)
+            console.log("Doubled:", doubled);  // [2, 4, 6, 8, 10]
+
+            // Formatting Data into Strings
+            const prices = [10, 25, 100];
+            const formattedPrices = prices.map(price => `$${price.toFixed(2)}`);
+            console.log("Formatted:", formattedPrices); // ["$10.00", "$25.00", "$100.00"]
+
+            //Using the second parameter (index)
+            const fruits = ["Apple", "Banana", "Mango"];
+            const numberedFruits = fruits.map((fruit, index) => `${index + 1}. ${fruit}`);
+            console.log("Numbered List:", numberedFruits);
+
+            const students = [
+            { id: 1, name: "Aung", mark: 85 },
+            { id: 2, name: "Su Su", mark: 92 },
+            { id: 3, name: "Mg Mg", mark: 35 }
+            ];
+            const studentNames = students.map(student => student.name);
+            console.log("Names only:", studentNames);
+
+            const gradedStudents = students.map(student => ({
+            ...student,
+            passed: student.mark >= 40,
+            grade: student.mark >= 80 ? "A" : student.mark >= 40 ? "C" : "F"
+            }));
+            
+            console.log("Graded Students:", gradedStudents);
+        </script>
+    </body>
+</html>

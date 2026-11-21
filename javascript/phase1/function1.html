@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Function Expression</title>
+    </head>
+    <body>
+        <script>
+            //storing an anonymous function inside a variable
+            const calculateSquare = function (num) {
+                return num * num;
+            };
+            console.log("Square of 5: ", calculateSquare(5));
+            console.log("Square of 9: ", calculateSquare(9));
+
+            //hoisting difference!
+            //function expressions are not hoisted like declarations
+            //calling it before it it defined will cause a referenceError
+            const double = function (n) {
+                return n * 2;
+            };
+            console.log("Double of 4: ", double(4));
+
+            const showSuccess = function () {
+                console.log("Task completed successfully!");
+            };
+            function runTask(taskName, onComplete) {
+                console.log(`Running task: ${taskName}...`);
+                onComplete();
+            }
+            runTask("Download File", showSuccess);
+        </script>
+    </body>
+</html>

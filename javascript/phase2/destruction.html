@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // 
+            // DAY 2: Destructuring (Arrays & Objects)
+            // 
+
+            // --- A. ARRAY DESTRUCTURING ---
+            const rgb = [255, 128, 0];
+
+            // Extract values by position
+            const [red, green, blue] = rgb;
+            console.log("RGB:", red, green, blue);
+
+            // Skipping elements & Default values
+            const scores = [95, 80];
+            const [firstScore, , thirdScore = 0] = scores; // Skips 80, thirdScore defaults to 0
+            console.log("First:", firstScore, "| Third:", thirdScore);
+
+            // Swapping two variables easily without a temp variable
+            let a = 10;
+            let b = 20;
+            [a, b] = [b, a];
+            console.log("Swapped:", a, b); // 20, 10
+
+
+            // --- B. OBJECT DESTRUCTURING ---
+            const student = {
+            id: 101,
+            name: "Su Su",
+            age: 20,
+            address: {
+                city: "Mandalay",
+                country: "Myanmar"
+            }
+            };
+
+            // Extract by property name + Renaming + Default value
+            const { name: fullName, age, role = "Student" } = student;
+            console.log(`Name: ${fullName}, Age: ${age}, Role: ${role}`);
+
+            // Nested Object Destructuring
+            const { address: { city } } = student;
+            console.log("City:", city);
+
+            // Destructuring directly in Function Parameters
+            function displayStudent({ id, name, address: { country } }) {
+            console.log(`[ID: ${id}] ${name} from ${country}`);
+            }
+            displayStudent(student);            
+        </script>
+    </body>
+</html>

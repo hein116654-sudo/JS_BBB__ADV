@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 4: Rest Parameters (...)
+            // ==========================================
+
+            // 1. Rest Parameters in Functions (Collects remaining arguments into an Array)
+            function calculateSum(...numbers) {
+            let total = 0;
+            for (const num of numbers) {
+                total += num;
+            }
+            return total;
+            }
+            console.log("Sum (3 args):", calculateSum(10, 20, 30));
+            console.log("Sum (5 args):", calculateSum(1, 2, 3, 4, 5));
+
+            // 2. Combining Regular Parameters + Rest Parameter
+            // Note: Rest parameter MUST always be the LAST parameter!
+            function announceTeam(leader, ...members) {
+            console.log(`Team Leader: ${leader}`);
+            console.log(`Members (${members.length}): ${members.join(", ")}`);
+            }
+            announceTeam("Kyaw", "Su Su", "Hla Hla", "Min Min");
+
+            // 3. Rest in Array Destructuring
+            const rankings = ["Gold", "Silver", "Bronze", "Participant 1", "Participant 2"];
+            const [firstPlace, secondPlace, ...others] = rankings;
+            console.log("Top 2:", firstPlace, secondPlace);
+            console.log("Others:", others);
+
+            // 4. Rest in Object Destructuring (Great for removing a sensitive property!)
+            const account = {
+            id: 1,
+            username: "coder_mm",
+            password: "secret_password_123",
+            email: "coder@example.com"
+            };
+
+            // Extract 'password' separately and collect the rest into 'safeUser'
+            const { password, ...safeUser } = account;
+            console.log("Safe User Data (without password):", safeUser);            
+        </script>
+    </body>
+</html>

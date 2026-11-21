@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // Every recursive function MUST have:
+            //Base Case (when to stop)
+            //Recursive Case (calling itself with a smaller/updated input)
+
+            //Countdown Example
+            function countdown(n) {
+            if (n <= 0) {
+                console.log("Blast off!");
+                return; // Base case: stops recursion
+            }
+            console.log(n);//5,4,3,2,1,
+            countdown(n - 1); // Recursive case
+            }
+
+            console.log("--- Countdown from 5 ---");
+            countdown(5);
+            
+
+            //Sum of numbers from 1 to n (e.g., sumTo(4) = 4 + 3 + 2 + 1 = 10)
+            function sumTo(n) {
+            if (n <= 1) {
+                return n; // Base case
+            }
+            return n + sumTo(n - 1); // Recursive case
+            }
+            console.log("Sum 1 to 5:", sumTo(5)); // 15
+
+            //Factorial (e.g., 5! = 5 * 4 * 3 * 2 * 1 = 120)
+            function factorial(n) {
+            if (n < 0) {
+                return "Error: Factorial is not defined for negative numbers.";
+            }
+            if (n === 0 || n === 1) {
+                return 1; // Base case (0! = 1, 1! = 1)
+            }
+            return n * factorial(n - 1);
+            }
+
+            console.log("Factorial of 5:", factorial(5));   // 120
+            console.log("Factorial of 0:", factorial(0));   // 1
+            console.log("Factorial of -2:", factorial(-2)); // Error message
+
+            //Power calculation using recursion (e.g., 2^4 = 16)
+            function power(base, exponent) {
+            if (exponent === 0) return 1; // Base case
+            return base * power(base, exponent - 1);
+            }
+            console.log("2 to the power of 4:", power(2, 4)); // 16            
+        </script>
+    </body>
+</html>

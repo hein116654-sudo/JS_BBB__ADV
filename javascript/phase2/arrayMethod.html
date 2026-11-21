@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            let tasks = ["Wake up", "Code JS"];
+            console.log("Initial tasks:", tasks);
+
+            //push
+            let newLength = tasks.push("Exercise", "Read book");
+            console.log("After push:", tasks, "| Length:",newLength);
+
+            //pop
+            let removedLast = tasks.pop();
+            console.log("After pop:", tasks, "| Removed", removedLast);
+
+            //unshift
+            tasks.unshift("Drink water");
+            console.log("After unshift:", tasks);
+
+            //shift
+            let removedFirst = tasks.shift();
+            console.log("After shift:", tasks, "| Removed:", removedFirst);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // 1. Copying an Array (Shallow Copy - avoids mutating original)
+            const originalFruits = ["Apple", "Banana"];
+            const copiedFruits = [...originalFruits];
+            copiedFruits.push("Mango");
+
+            console.log("Original:", originalFruits); // ["Apple", "Banana"]
+            console.log("Copied:", copiedFruits);     // ["Apple", "Banana", "Mango"]
+
+            // 2. Merging Arrays & Adding Items
+            const frontend = ["HTML", "CSS"];
+            const backend = ["Node.js", "SQL"];
+            const fullStack = [...frontend, "JavaScript", ...backend];
+            console.log("Full Stack:", fullStack);
+
+            // 3. Spreading Array into Function Arguments
+            const numbers = [12, 45, 7, 89, 23];
+            console.log("Max Number:", Math.max(...numbers)); // Same as Math.max(12, 45, 7, 89, 23)
+
+            // 4. Copying & Updating Objects Immutably
+            const user = { id: 1, name: "Mg Mg", mark: 70 };
+
+            // Later properties overwrite earlier ones
+            const updatedUser = {
+            ...user,
+            mark: 85,            // Updates mark
+            grade: "A"           // Adds new property
+            };
+
+            console.log("Original User:", user);
+            console.log("Updated User:", updatedUser);
+
+            // 5. Converting String into Array of characters
+            const letters = [..."Hello"];
+            console.log("Letters:", letters); // ['H', 'e', 'l', 'l', 'o']           
+        </script>
+    </body>
+</html>

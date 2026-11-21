@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            //Default Parameters (Fallback value if argument is missing)
+            function greetCustomer(name = "Valued Customer", currency = "MMK") {
+            console.log(`Hello ${name}, your prices are shown in ${currency}.`);
+            }
+
+            greetCustomer("Kyaw Kyaw", "USD");
+            greetCustomer("Mya Mya"); // currency defaults to "MMK"
+            greetCustomer();          // both use defaults
+
+            //Rest Parameters (...numbers) - Accepts unlimited arguments as an Array
+            function sumAll(...numbers) { //numbers = [10,20] , number =[5, 10, 15, 20, 25]
+            let total = 0;
+            for (let i = 0; i < numbers.length; i++) {
+                total += numbers[i];
+            }
+            return total;
+            }
+
+            console.log("Sum of 2 numbers:", sumAll(10, 20));
+            console.log("Sum of 5 numbers:", sumAll(5, 10, 15, 20, 25));
+
+            //Return Statement & Early Return (Great for Validation!)
+            function divideNumbers(a, b) {
+            if (b === 0) {
+                return "Error: Cannot divide by zero!"; // Stops function immediately
+            }
+            return a / b;
+            console.log("This line will NEVER run because it is after return.");
+            }
+
+            console.log("10 / 2 =", divideNumbers(10, 2));
+            console.log("10 / 0 =", divideNumbers(10, 0));
+
+            //Storing and reusing returned values
+            function calculateTax(price, taxRate = 0.05) {
+            return price * taxRate;
+            }
+
+            let itemPrice = 200;
+            let tax = calculateTax(itemPrice);
+            let finalPrice = itemPrice + tax;
+            console.log(`Item: $${itemPrice}, Tax: $${tax}, Final: $${finalPrice}`);            
+        </script>
+    </body>
+</html>

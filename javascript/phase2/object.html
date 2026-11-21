@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+
+            //object create
+            const person = {
+                firstName: "Kyaw",
+                lastName: "Zin",
+                age: 24,
+                isEmployed: true,
+                "home city": "Yangon"//key with space requires quotes
+            };
+
+            console.log("Name:", person.firstName, person.lastName);
+            console.log("City:", person["home city"]);
+
+            let keyToCheck = "age";
+            console.log("Dynamic access (age):", person[keyToCheck]);
+
+            person.email = "kyawzin@example.com";
+            person.age = 25;
+            console.log("Updated person:", person);
+
+            delete person.isEmployed;
+            console.log("After delete:", person);
+
+            console.log("Has 'Email'?:", "email" in person);
+            console.log("Has 'salary'?:", Object.hasOwn(person, "salary"));
+        </script>
+    </body>
+</html>

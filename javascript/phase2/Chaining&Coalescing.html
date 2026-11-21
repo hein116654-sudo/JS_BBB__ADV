@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 5: Optional Chaining (?.) & Nullish Coalescing (??)
+            // ==========================================
+
+            // --- A. OPTIONAL CHAINING (?.) ---
+            const user1 = {
+            name: "Aye Aye",
+            profile: {
+                email: "aye@example.com"
+            },
+            greet() {
+                return "Hello!";
+            }
+            };
+
+            const user2 = {
+            name: "Ko Ko"
+            // Notice: no 'profile' and no 'greet' method!
+            };
+
+            // Without ?., user2.profile.email would throw: TypeError: Cannot read properties of undefined
+            console.log("User 1 Email:", user1?.profile?.email); // "aye@example.com"
+            console.log("User 2 Email:", user2?.profile?.email); // undefined (Safe, no crash!)
+
+            // Optional Chaining with Methods & Arrays
+            console.log("User 1 Greet:", user1.greet?.()); // "Hello!"
+            console.log("User 2 Greet:", user2.greet?.()); // undefined (Safe!)
+            console.log("Array safe check:", user2.hobbies?.[0]); // undefined
+
+
+            // --- B. NULLISH COALESCING (??) ---
+            // '??' returns the right side ONLY IF the left side is null or undefined.
+            // Unlike '||', it does NOT treat 0, "", or false as missing!
+
+            let examMark = 0; // Valid score of zero!
+
+            console.log("Using || (Buggy for 0):", examMark || "No mark"); // "No mark" (WRONG!)
+            console.log("Using ?? (Accurate):", examMark ?? "No mark");    // 0 (CORRECT!)
+
+            let userBio = "";
+            console.log("Empty string with ??:", userBio ?? "Default Bio"); // "" (preserved)
+
+            // --- C. COMBINING ?. AND ?? TOGETHER ---
+            const city1 = user1?.profile?.address?.city ?? "City not provided";
+            const city2 = user2?.profile?.email ?? "No email registered";
+
+            console.log("City 1:", city1); // "City not provided"
+            console.log("Email 2:", city2); // "No email registered"            
+        </script>
+    </body>
+</html>

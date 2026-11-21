@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="my" data-theme="valentine">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>For My Special Crush 🩷</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+Myanmar:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Fredoka', 'Noto Sans Myanmar', sans-serif;
+      background: linear-gradient(155deg, #fff0f6 0%, #ffd6e8 45%, #ffb3d3 100%);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .floating-bg {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-heart {
+      position: absolute;
+      bottom: -40px;
+      opacity: 0.55;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg) scale(0.9); opacity: 0; }
+      15% { opacity: 0.65; }
+      85% { opacity: 0.55; }
+      100% { transform: translateY(-110vh) rotate(25deg) scale(1.15); opacity: 0; }
+    }
+
+    .sticker-bounce {
+      animation: gentleBob 2.4s ease-in-out infinite;
+    }
+
+    @keyframes gentleBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .btn-dodging {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), font-size 0.2s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+
+  <div class="floating-bg" id="floating-bg"></div>
+
+  <button
+    id="open-customizer-btn"
+    class="fixed top-4 right-4 z-30 btn btn-circle btn-sm bg-white/80 border-pink-300 text-pink-600 shadow-md hover:bg-pink-100"
+    title="Customer Link ထုတ်ရန်"
+  >
+    ⚙️
+  </button>
+
+  <!-- Main Q&A Card -->
+  <main id="quiz-card" class="relative z-10 card w-full max-w-[390px] bg-white/85 backdrop-blur-xl border-2 border-pink-300 shadow-[0_20px_60px_rgba(236,72,153,0.28)] rounded-[32px] animate__animated animate__zoomIn">
+    <div class="badge badge-primary absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-3.5 text-xs font-bold tracking-wide shadow-md bg-gradient-to-r from-pink-500 to-rose-400 border-none text-white whitespace-nowrap">
+      💌 A SECRET QUESTION FOR YOU 💌
+    </div>
+
+    <div class="card-body p-6 pt-8 items-center text-center gap-3">
+      <div class="flex items-center gap-2 mb-1">
+        <span id="step-dot-0" class="h-2.5 w-7 rounded-full bg-pink-500 transition-all duration-300"></span>
+        <span id="step-dot-1" class="h-2.5 w-2.5 rounded-full bg-pink-200 transition-all duration-300"></span>
+        <span id="step-dot-2" class="h-2.5 w-2.5 rounded-full bg-pink-200 transition-all duration-300"></span>
+      </div>
+
+      <!-- Character Sticker Box (Supports GIF + Tenor Embed Fallback + SVG Fallback) -->
+      <div id="sticker-box" class="relative w-44 h-44 rounded-3xl bg-pink-50/90 border-2 border-pink-200 flex items-center justify-center p-2 shadow-inner overflow-hidden sticker-bounce">
+        <img
+          id="sticker-img"
+          referrerpolicy="no-referrer"
+          alt="Cute Sticker"
+          class="w-full h-full object-contain rounded-2xl"
+        />
+        <iframe
+          id="sticker-iframe"
+          class="hidden w-full h-full rounded-2xl border-0 pointer-events-none"
+          loading="lazy"
+        ></iframe>
+        <span id="sticker-tag" class="absolute bottom-1.5 right-2 text-[10px] font-semibold bg-white/90 text-pink-500 px-2 py-0.5 rounded-full shadow-sm border border-pink-200 z-10">
+          Quby 🤍
+        </span>
+      </div>
+
+      <div class="text-sm font-bold text-pink-500 mt-1">
+        Hey, <span id="display-to" class="underline decoration-pink-300 decoration-wavy">My Crush</span>! 🌸
+      </div>
+
+      <h1 id="question-text" class="text-[1.06rem] font-bold text-rose-950 leading-relaxed min-h-[72px] flex items-center justify-center px-1"></h1>
+
+      <p id="plead-note" class="text-xs font-semibold text-pink-500 min-h-[18px]"></p>
+
+      <div id="btn-area" class="w-full flex flex-col items-center gap-3 mt-1 relative min-h-[115px] justify-center">
+        <button
+          id="btn-yes"
+          class="btn w-full rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 border-none text-white font-bold text-base shadow-[0_8px_24px_rgba(244,63,94,0.4)] transition-all duration-200"
+        ></button>
+
+        <button
+          id="btn-no"
+          class="btn btn-outline border-pink-300 text-pink-600 hover:bg-pink-100 hover:border-pink-400 w-full rounded-2xl font-semibold text-sm btn-dodging"
+        ></button>
+      </div>
+
+      <div class="flex items-center justify-center gap-2 pt-2 border-t border-pink-100 w-full text-[11px] text-pink-400 font-medium">
+        <span>✨ Quby</span> • <span>Pentol</span> • <span>Peach & Goma ✨</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Finale Success Card -->
+  <section id="finale-card" class="hidden relative z-10 card w-full max-w-[395px] bg-white/90 backdrop-blur-xl border-2 border-pink-400 shadow-[0_25px_70px_rgba(244,63,94,0.35)] rounded-[32px] animate__animated">
+    <div class="badge absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-3.5 text-xs font-bold shadow-md bg-gradient-to-r from-rose-500 to-pink-500 border-none text-white whitespace-nowrap">
+      💖 YAY! SHE / HE SAID YES! 💖
+    </div>
+
+    <div class="card-body p-6 pt-8 items-center text-center gap-3">
+      <div class="flex items-center justify-center gap-2 w-full">
+        <div class="w-32 h-32 rounded-2xl bg-pink-50 border-2 border-pink-200 p-1.5 shadow-inner sticker-bounce overflow-hidden">
+          <img
+            id="win-img-1"
+            referrerpolicy="no-referrer"
+            src="https://media.tenor.com/jztuGnZLDG0AAAAj/peach-and-goma-goma.gif"
+            alt="Peach and Goma"
+            class="w-full h-full object-contain rounded-xl"
+          />
+        </div>
+        <div class="w-32 h-32 rounded-2xl bg-pink-50 border-2 border-pink-200 p-1.5 shadow-inner sticker-bounce overflow-hidden" style="animation-delay: 0.3s;">
+          <img
+            id="win-img-2"
+            referrerpolicy="no-referrer"
+            src="https://media.tenor.com/rCv2vCIakhQAAAAj/quby-quby-sticker.gif"
+            alt="Quby Cute"
+            class="w-full h-full object-contain rounded-xl"
+          />
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-pink-600 mt-1">Yayyy! 🥳💞</h2>
+
+      <p id="final-msg" class="text-sm text-rose-950 leading-7 bg-pink-50/90 p-4 rounded-2xl border border-pink-200 w-full font-medium"></p>
+
+      <div class="w-full bg-rose-50/70 border border-pink-200 rounded-2xl p-3">
+        <p class="text-xs font-bold text-pink-600 mb-2">ကိုယ်တို့ Date လုပ်ရင် ဘာစားကြမလဲ? 🥺👇</p>
+        <div class="grid grid-cols-2 gap-2" id="date-options">
+          <button class="date-opt btn btn-xs h-9 rounded-xl bg-white border-pink-200 text-pink-600 hover:bg-pink-500 hover:text-white" data-choice="Milk Tea 🧋">🧋 Milk Tea</button>
+          <button class="date-opt btn btn-xs h-9 rounded-xl bg-white border-pink-200 text-pink-600 hover:bg-pink-500 hover:text-white" data-choice="Hotpot / BBQ 🍲">🍲 Hotpot</button>
+          <button class="date-opt btn btn-xs h-9 rounded-xl bg-white border-pink-200 text-pink-600 hover:bg-pink-500 hover:text-white" data-choice="Ice Cream 🍨">🍨 Ice Cream</button>
+          <button class="date-opt btn btn-xs h-9 rounded-xl bg-white border-pink-200 text-pink-600 hover:bg-pink-500 hover:text-white" data-choice="Movie Date 🍿">🍿 Movie</button>
+        </div>
+        <p id="date-picked-msg" class="text-xs font-bold text-rose-500 mt-2 hidden"></p>
+      </div>
+
+      <div class="text-xs font-bold text-pink-500 mt-1">
+        From: <span id="display-from">Your Secret Admirer</span> 💌
+      </div>
+
+      <p class="text-[11px] text-pink-400">📸 Screenshot ရိုက်ပြီး ပြန်ပို့ပေးနော်!</p>
+
+      <button id="btn-replay" class="btn btn-sm btn-ghost text-pink-500 rounded-xl mt-1">🔄 ပြန်ကစားမယ်</button>
+    </div>
+  </section>
+
+  <!-- Seller / Reseller Customizer Modal -->
+  <div id="customizer-backdrop" class="hidden fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="card w-full max-w-[400px] max-h-[90vh] overflow-y-auto bg-white text-rose-950 border-2 border-pink-300 shadow-2xl rounded-3xl">
+      <div class="card-body p-5 gap-2.5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-bold text-pink-600">🛠️ Customer Link ထုတ်ရန်</h2>
+          <button id="close-customizer-btn" class="btn btn-ghost btn-circle btn-xs text-pink-600">✕</button>
+        </div>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs font-semibold text-pink-600 mb-1">Crush နာမည် (To)</span>
+          <input type="text" id="input-to" class="input input-bordered input-sm border-pink-300 bg-pink-50/40 rounded-xl w-full" />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs font-semibold text-pink-600 mb-1">ပို့သူ နာမည် (From)</span>
+          <input type="text" id="input-from" class="input input-bordered input-sm border-pink-300 bg-pink-50/40 rounded-xl w-full" />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs font-semibold text-pink-600 mb-1">မေးခွန်း (၁)</span>
+          <input type="text" id="input-q1" class="input input-bordered input-sm border-pink-300 bg-pink-50/40 rounded-xl w-full" />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs font-semibold text-pink-600 mb-1">မေးခွန်း (၂)</span>
+          <input type="text" id="input-q2" class="input input-bordered input-sm border-pink-300 bg-pink-50/40 rounded-xl w-full" />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs font-semibold text-pink-600 mb-1">နောက်ဆုံး ဖွင့်ပြောမယ့် မေးခွန်း (၃)</span>
+          <textarea id="input-q3" rows="2" class="textarea textarea-bordered border-pink-300 bg-pink-50/40 rounded-xl w-full text-xs"></textarea>
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-xs font-semibold text-pink-600 mb-1">Yes နှိပ်ပြီးရင် ပေါ်မယ့်စာ (Final Message)</span>
+          <textarea id="input-msg" rows="2" class="textarea textarea-bordered border-pink-300 bg-pink-50/40 rounded-xl w-full text-xs"></textarea>
+        </label>
+
+        <button id="btn-generate-link" class="btn bg-gradient-to-r from-pink-500 to-rose-500 border-none text-white rounded-2xl mt-2">
+          🔗 Link ထုတ်ပြီး Copy ကူးမယ်
+        </button>
+        <p id="copy-feedback" class="text-xs text-emerald-600 font-semibold text-center break-all min-h-[18px]"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Floating Hearts
+    const bgContainer = document.getElementById('floating-bg');
+    const bgEmojis = ['🩷', '💖', '🌸', '💗', '✨', '🌷'];
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('span');
+      el.className = 'bg-heart';
+      el.textContent = bgEmojis[i % bgEmojis.length];
+      el.style.left = `${Math.random() * 100}%`;
+      el.style.fontSize = `${16 + Math.random() * 18}px`;
+      el.style.animationDuration = `${7 + Math.random() * 8}s`;
+      el.style.animationDelay = `${Math.random() * 7}s`;
+      bgContainer.appendChild(el);
+    }
+
+    // Sound Effects
+    let audioCtx = null;
+    function playSound(type) {
+      try {
+        if (!audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AC();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === 'yes') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523, now);
+          osc.frequency.exponentialRampToValueAtTime(784, now + 0.12);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(); osc.stop(now + 0.18);
+        } else if (type === 'no') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.exponentialRampToValueAtTime(190, now + 0.14);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(); osc.stop(now + 0.16);
+        } else if (type === 'win') {
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + i * 0.09);
+            gain.gain.setValueAtTime(0.14, now + i * 0.09);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.45);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(now + i * 0.09); osc.stop(now + i * 0.09 + 0.48);
+          });
+        }
+      } catch (e) {}
+    }
+
+    // URL Config
+    const params = new URLSearchParams(window.location.search);
+    const config = {
+      to: params.get('to') || 'My Crush',
+      from: params.get('from') || 'Your Secret Admirer',
+      q1: params.get('q1') || 'ကိုယ်ပြောစရာလေး ရှိလို့... ခဏလောက် နားထောင်ပေးမလား? 🥺💗',
+      q2: params.get('q2') || 'တကယ်တော့လေ... မင်းကို တွေ့တဲ့နေ့ကတည်းက ကိုယ့်ရင်ထဲ တမျိုးလေး ဖြစ်နေတာ သိလား? 👉👈',
+      q3: params.get('q3') || 'နေ့တိုင်း မင်းအကြောင်းပဲ တွေးနေမိလို့... ကိုယ့်ကို တစ်ခါလောက် ချစ်ခွင့်ပေးနိုင်မလား? 🥹💘',
+      msg: params.get('msg') || 'လက်ခံပေးလို့ အရမ်းပျော်တာပဲ! ဒီနေ့ကစပြီး ကိုယ့်ကမ္ဘာလေးထဲမှာ မင်းအတွက် အချစ်တွေအပြည့်ပေးမယ်နော် 🩷✨'
+    };
+
+    if (params.get('gift') === '1') {
+      document.getElementById('open-customizer-btn').classList.add('hidden');
+    }
+
+    // Verified Tenor Direct GIFs + Official Tenor Embed IDs (2-layer guarantee!)
+    function getStages() {
+      return [
+        {
+          question: config.q1,
+          sticker: 'https://media.tenor.com/rCv2vCIakhQAAAAj/quby-quby-sticker.gif',
+          embedId: '22153953',
+          tag: 'Quby 🌸',
+          yesText: '💞 နားထောင်မယ် (Yes)',
+          noText: '🙈 ဟင့်အင်း (No)'
+        },
+        {
+          question: config.q2,
+          sticker: 'https://media.tenor.com/jztuGnZLDG0AAAAj/peach-and-goma-goma.gif',
+          embedId: '15974530976611222074',
+          tag: 'Peach & Goma 🐱',
+          yesText: '😊 ပြောကြည့်လေ (Yes)',
+          noText: '🙄 မသိဘူး (No)'
+        },
+        {
+          question: config.q3,
+          sticker: 'https://media.tenor.com/qWxgGlYVAVcAAAAd/quby-pentol.gif',
+          embedId: '1174838705394808298',
+          tag: 'Pentol & Quby 💘',
+          yesText: '💖 Yes, I do! (လက်ခံမယ်)',
+          noText: '🙅‍♀️ No (စဉ်းစားဦးမယ်)'
+        }
+      ];
+    }
+
+    const CRY_STICKERS = [
+      { url: 'https://media.tenor.com/zgY0OdejAIIAAAAj/quby-cute.gif', embedId: '18148463711766725559', tag: 'Quby Crying 😭' },
+      { url: 'https://media.tenor.com/ovgKIMFWZHYAAAAM/quby-y%C3%AAu-y%C3%AAu.gif', embedId: '18148463711766725559', tag: 'Peach Crying 🥺' }
+    ];
+
+    const PLEAD_MESSAGES = [
+      { btn: 'တကယ်ကြီး No လား? 🥺', note: 'ဟင့်... ကိုယ် ငိုတော့မှာနော် 😭' },
+      { btn: 'ပြန်စဉ်းစားပါဦးနော် 💔', note: 'တစ်ခါလောက်ပဲ Yes နှိပ်ပေးပါ 🥺👉👈' },
+      { btn: 'မုန့်ဝယ်ကျွေးမယ်လေ 🧋🍰', note: 'Bubble Tea ရော ကိတ်မုန့်ရော ဝယ်ကျွေးမယ်နော်!' },
+      { btn: 'No နှိပ်လို့မရဘူး 😜', note: 'ဟားဟား! No ခလုတ်လေး ထွက်ပြေးပြီ 💨' }
+    ];
+
+    // Fixed Cute SVG Data URI (Fallback if offline)
+    function getCuteSvgFallback(isCrying = false) {
+      const mouth = isCrying
+        ? '<path d="M88 122 Q100 112 112 122" fill="none" stroke="#be185d" stroke-width="4" stroke-linecap="round"/><path d="M72 108 L68 124 M128 108 L132 124" stroke="#60a5fa" stroke-width="4" stroke-linecap="round"/>'
+        : '<path d="M88 115 Q100 127 112 115" fill="none" stroke="#be185d" stroke-width="4" stroke-linecap="round"/>';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="108" r="64" fill="#fff" stroke="#f472b6" stroke-width="5"/><circle cx="75" cy="96" r="7" fill="#3b0764"/><circle cx="125" cy="96" r="7" fill="#3b0764"/><ellipse cx="62" cy="110" rx="11" ry="6" fill="#fda4af"/><ellipse cx="138" cy="110" rx="11" ry="6" fill="#fda4af"/>${mouth}<text x="100" y="34" text-anchor="middle" font-size="26">${isCrying ? '💔' : '💗'}</text></svg>`;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    let currentStep = 0;
+    let noCount = 0;
+    let currentFallbackEmbedId = '';
+    let currentIsCrying = false;
+
+    const quizCard = document.getElementById('quiz-card');
+    const finaleCard = document.getElementById('finale-card');
+    const stickerImg = document.getElementById('sticker-img');
+    const stickerIframe = document.getElementById('sticker-iframe');
+    const stickerTag = document.getElementById('sticker-tag');
+    const questionText = document.getElementById('question-text');
+    const pleadNote = document.getElementById('plead-note');
+    const btnYes = document.getElementById('btn-yes');
+    const btnNo = document.getElementById('btn-no');
+
+    function setSticker(gifUrl, embedId, tag, isCrying = false) {
+      currentFallbackEmbedId = embedId;
+      currentIsCrying = isCrying;
+      stickerTag.textContent = tag;
+
+      stickerIframe.classList.add('hidden');
+      stickerIframe.src = '';
+      stickerImg.classList.remove('hidden');
+      stickerImg.src = gifUrl;
+    }
+
+    // If direct GIF fails, automatically use Tenor Official Embed Iframe (or SVG if offline)
+    stickerImg.addEventListener('error', () => {
+      if (navigator.onLine && currentFallbackEmbedId) {
+        stickerImg.classList.add('hidden');
+        stickerIframe.src = `https://tenor.com/embed/${currentFallbackEmbedId}`;
+        stickerIframe.classList.remove('hidden');
+      } else {
+        stickerImg.src = getCuteSvgFallback(currentIsCrying);
+      }
+    });
+
+    // Fallbacks for Finale stickers too
+    document.getElementById('win-img-1').addEventListener('error', function() {
+      this.src = getCuteSvgFallback(false);
+    });
+    document.getElementById('win-img-2').addEventListener('error', function() {
+      this.src = getCuteSvgFallback(false);
+    });
+
+    function renderStep() {
+      const stages = getStages();
+      const s = stages[currentStep];
+      noCount = 0;
+
+      document.getElementById('display-to').textContent = config.to;
+      document.getElementById('display-from').textContent = config.from;
+      document.getElementById('final-msg').textContent = config.msg;
+
+      setSticker(s.sticker, s.embedId, s.tag, false);
+      questionText.textContent = s.question;
+      pleadNote.textContent = '';
+
+      btnYes.textContent = s.yesText;
+      btnYes.style.transform = 'scale(1)';
+      btnNo.textContent = s.noText;
+      btnNo.style.transform = 'translate(0px, 0px) scale(1)';
+
+      [0, 1, 2].forEach(i => {
+        const dot = document.getElementById(`step-dot-${i}`);
+        dot.className = i === currentStep
+          ? 'h-2.5 w-7 rounded-full bg-pink-500 transition-all duration-300'
+          : 'h-2.5 w-2.5 rounded-full bg-pink-200 transition-all duration-300';
+      });
+    }
+
+    renderStep();
+
+    btnYes.addEventListener('click', () => {
+      if (currentStep < 2) {
+        playSound('yes');
+        currentStep++;
+        quizCard.classList.remove('animate__zoomIn', 'animate__pulse');
+        void quizCard.offsetWidth;
+        quizCard.classList.add('animate__pulse');
+        renderStep();
+      } else {
+        playSound('win');
+        quizCard.classList.add('hidden');
+        finaleCard.classList.remove('hidden');
+        finaleCard.classList.remove('animate__bounceIn');
+        void finaleCard.offsetWidth;
+        finaleCard.classList.add('animate__bounceIn');
+        fireHeartConfetti();
+      }
+    });
+
+    function dodgeNoButton() {
+      const rx = (Math.random() * 2 - 1) * 85;
+      const ry = (Math.random() * 2 - 1) * 55;
+      btnNo.style.transform = `translate(${rx}px, ${ry}px) scale(0.82)`;
+    }
+
+    btnNo.addEventListener('click', () => {
+      playSound('no');
+      const idx = Math.min(noCount, PLEAD_MESSAGES.length - 1);
+      const cry = CRY_STICKERS[noCount % CRY_STICKERS.length];
+
+      setSticker(cry.url, cry.embedId, cry.tag, true);
+      btnNo.textContent = PLEAD_MESSAGES[idx].btn;
+      pleadNote.textContent = PLEAD_MESSAGES[idx].note;
+
+      noCount++;
+      btnYes.style.transform = `scale(${Math.min(1 + noCount * 0.08, 1.28)})`;
+      if (noCount >= 3) dodgeNoButton();
+    });
+
+    btnNo.addEventListener('mouseenter', () => {
+      if (noCount >= 3) dodgeNoButton();
+    });
+
+    function fireHeartConfetti() {
+      const colors = ['#ff4d8d', '#ff85b3', '#ffc2d9', '#ffd166', '#ffffff'];
+      confetti({ particleCount: 90, spread: 80, origin: { y: 0.55 }, colors });
+      setTimeout(() => {
+        confetti({ particleCount: 60, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors });
+        confetti({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors });
+      }, 280);
+    }
+
+    document.querySelectorAll('.date-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        playSound('yes');
+        const choice = btn.dataset.choice;
+        document.querySelectorAll('.date-opt').forEach(b => {
+          b.classList.remove('bg-pink-500', 'text-white');
+          b.classList.add('bg-white', 'text-pink-600');
+        });
+        btn.classList.remove('bg-white', 'text-pink-600');
+        btn.classList.add('bg-pink-500', 'text-white');
+
+        const msgEl = document.getElementById('date-picked-msg');
+        msgEl.textContent = `Yay! "${choice}" သွားစားဖို့ Deal ပြီနော် 🩷✨`;
+        msgEl.classList.remove('hidden');
+        confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 }, colors: ['#ff4d8d', '#ffc2d9'] });
+      });
+    });
+
+    document.getElementById('btn-replay').addEventListener('click', () => {
+      currentStep = 0;
+      finaleCard.classList.add('hidden');
+      quizCard.classList.remove('hidden');
+      document.getElementById('date-picked-msg').classList.add('hidden');
+      renderStep();
+    });
+
+    // Seller Customizer Modal
+    const customizerBackdrop = document.getElementById('customizer-backdrop');
+    document.getElementById('open-customizer-btn').addEventListener('click', () => {
+      document.getElementById('input-to').value = config.to;
+      document.getElementById('input-from').value = config.from;
+      document.getElementById('input-q1').value = config.q1;
+      document.getElementById('input-q2').value = config.q2;
+      document.getElementById('input-q3').value = config.q3;
+      document.getElementById('input-msg').value = config.msg;
+      document.getElementById('copy-feedback').textContent = '';
+      customizerBackdrop.classList.remove('hidden');
+    });
+
+    document.getElementById('close-customizer-btn').addEventListener('click', () => {
+      customizerBackdrop.classList.add('hidden');
+    });
+
+    document.getElementById('btn-generate-link').addEventListener('click', async () => {
+      config.to = document.getElementById('input-to').value.trim() || 'My Crush';
+      config.from = document.getElementById('input-from').value.trim() || 'Your Secret Admirer';
+      config.q1 = document.getElementById('input-q1').value.trim() || config.q1;
+      config.q2 = document.getElementById('input-q2').value.trim() || config.q2;
+      config.q3 = document.getElementById('input-q3').value.trim() || config.q3;
+      config.msg = document.getElementById('input-msg').value.trim() || config.msg;
+
+      currentStep = 0;
+      finaleCard.classList.add('hidden');
+      quizCard.classList.remove('hidden');
+      renderStep();
+
+      const url = new URL(window.location.href.split('?')[0]);
+      url.searchParams.set('to', config.to);
+      url.searchParams.set('from', config.from);
+      url.searchParams.set('q1', config.q1);
+      url.searchParams.set('q2', config.q2);
+      url.searchParams.set('q3', config.q3);
+      url.searchParams.set('msg', config.msg);
+      url.searchParams.set('gift', '1');
+
+      try {
+        await navigator.clipboard.writeText(url.toString());
+        document.getElementById('copy-feedback').textContent = '✅ Customer Link ကို Copy ကူးပြီးပါပြီ!';
+      } catch {
+        document.getElementById('copy-feedback').textContent = url.toString();
+      }
+    });
+  </script>
+</body>
+</html>

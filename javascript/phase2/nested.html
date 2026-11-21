@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 6: Nested Arrays & Objects
+            // ==========================================
+
+            // 1. Nested Array (2D Array / Grid)
+            const matrix = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+            ];
+            console.log("Center value [1][1]:", matrix[1][1]); // 5
+
+            // 2. Nested Object & Array inside Object
+            const userProfile = {
+            username: "coder_mm",
+            skills: ["HTML", "CSS", "JavaScript"],
+            address: {
+                street: "Pyay Road",
+                city: "Yangon",
+                country: "Myanmar"
+            }
+            };
+
+            console.log("Second skill:", userProfile.skills[1]);       // "CSS"
+            console.log("User city:", userProfile.address.city);       // "Yangon"
+
+            // 3. Array of Objects (Very common in real-world APIs & Databases!)
+            const products = [
+            { id: 101, name: "Mouse", price: 15, inStock: true },
+            { id: 102, name: "Keyboard", price: 45, inStock: false },
+            { id: 103, name: "Monitor", price: 200, inStock: true }
+            ];
+
+            console.log("Second product name:", products[1].name); // "Keyboard"
+
+            console.log("--- Available Products ---");
+            for (const item of products) {
+            if (item.inStock) {
+                console.log(`${item.name} - $${item.price}`);
+            }
+            }
+        </script>
+    </body>
+</html>

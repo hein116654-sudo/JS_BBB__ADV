@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Array Fundamentals</title>
+    </head>
+    <body>
+        <script>
+            const fruits = ["Apple", "Banana", "Orange", "Mango"];
+            const mixedArray = ["Hello", 42, true, null];
+            
+            console.log("Fruits:", fruits);
+            console.log("Total fruits (.length):", fruits.length);
+
+            console.log("First fruit [0]:", fruits[0]);
+            console.log("First fruit [2]:", fruits[2]);   
+            console.log("Last fruit:", fruits[fruits.length - 1]);
+            
+            //modifying  and element
+            fruits[1] = "Strawberry";
+            console.log("After modification:", fruits);
+
+            //checking if a variable is an array
+            console.log("Is fruits an array?:", Array.isArray(fruits));
+            console.log("Is 'Apple' an array?:", Array.isArray("Apple"));
+
+            //looping through an array
+            console.log("--Using standard for loop--");
+            for (let i = 0; i < fruits.length; i++) {
+                console.log(`Index ${i}: ${fruits[i]}`);
+            }
+            console.log("--Using for...of loop--");
+            for (const fruit of fruits) {
+                console.log("Fruits: ", fruit);
+            }
+        </script>
+    </body>
+</html>
