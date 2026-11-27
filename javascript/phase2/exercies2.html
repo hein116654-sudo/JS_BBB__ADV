@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 7: Week 7 Review & Mastery Exercises
+            // Focus: Mastering map(), filter(), reduce() & Method Chaining
+            // ==========================================
+
+            const orders = [
+            { id: 1, customer: "Aung", category: "Electronics", price: 500, qty: 1, status: "Completed" },
+            { id: 2, customer: "Su Su", category: "Clothing", price: 40, qty: 3, status: "Completed" },
+            { id: 3, customer: "Mg Mg", category: "Electronics", price: 150, qty: 2, status: "Cancelled" },
+            { id: 4, customer: "Hla Hla", category: "Books", price: 25, qty: 4, status: "Completed" },
+            { id: 5, customer: "Kyaw", category: "Electronics", price: 120, qty: 2, status: "Completed" },
+            { id: 6, customer: "Mya", category: "Clothing", price: 60, qty: 1, status: "Pending" }
+            ];
+
+            // ------------------------------------------
+            // EXERCISE 1 (map): Add a 'total' property to every order
+            // ------------------------------------------
+            const ordersWithTotal = orders.map(order => ({
+            ...order,
+            total: order.price * order.qty
+            }));
+            console.log("1. Orders with Total:", ordersWithTotal);
+
+
+            // ------------------------------------------
+            // EXERCISE 2 (filter + map Chaining):
+            // Get the names of customers whose orders are "Completed" AND spent >= $100
+            // ------------------------------------------
+            const vipCompletedCustomers = orders
+            .filter(o => o.status === "Completed" && (o.price * o.qty) >= 100)
+            .map(o => `${o.customer} ($${o.price * o.qty})`);
+
+            console.log("2. Completed Orders >= $100:", vipCompletedCustomers);
+            // Expected: ["Aung ($500)", "Su Su ($120)", "Hla Hla ($100)", "Kyaw ($240)"]
+
+
+            // ------------------------------------------
+            // EXERCISE 3 (filter + reduce Chaining):
+            // Calculate TOTAL REVENUE from "Completed" orders ONLY
+            // ------------------------------------------
+            const totalRevenue = orders
+            .filter(order => order.status === "Completed")
+            .reduce((sum, order) => sum + (order.price * order.qty), 0);
+
+            console.log("3. Total Completed Revenue: $", totalRevenue); // 500 + 120 + 100 + 240 = 960
+
+
+            // ------------------------------------------
+            // EXERCISE 4 (reduce Grouping & Summing):
+            // Calculate total revenue per category (Completed orders only)
+            // ------------------------------------------
+            const revenueByCategory = orders
+            .filter(o => o.status === "Completed")
+            .reduce((acc, o) => {
+                const orderTotal = o.price * o.qty;
+                acc[o.category] = (acc[o.category] || 0) + orderTotal;
+                return acc;
+            }, {});
+
+            console.log("4. Completed Revenue by Category:", revenueByCategory);
+            // Expected: { Electronics: 740, Clothing: 120, Books: 100 }
+
+
+            // ------------------------------------------
+            // EXERCISE 5 (find, some, every):
+            // Data checks & validation
+            // ------------------------------------------
+            const hasCancelledOrder = orders.some(o => o.status === "Cancelled");
+            const allAboveTwentyDollars = orders.every(o => o.price >= 20);
+            const orderByHlaHla = orders.find(o => o.customer === "Hla Hla");
+
+            console.log("5a. Any cancelled order?:", hasCancelledOrder);      // true
+            console.log("5b. All item prices >= $20?:", allAboveTwentyDollars); // true
+            console.log("5c. Hla Hla's Order:", orderByHlaHla);
+
+
+            // ------------------------------------------
+            // EXERCISE 6 (filter + sort + map):
+            // Rank Completed orders from Highest Total to Lowest Total
+            // ------------------------------------------
+            const rankedCompletedOrders = orders
+            .filter(o => o.status === "Completed")
+            .map(o => ({ customer: o.customer, total: o.price * o.qty }))
+            .sort((a, b) => b.total - a.total);
+
+            console.log("6. Ranked Completed Orders (Highest to Lowest):");
+            console.table(rankedCompletedOrders);
+        </script>        
+    </body>
+</html>

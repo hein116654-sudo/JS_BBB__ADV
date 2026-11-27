@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 1: Callback Functions
+            // ==========================================
+
+            // 1. Synchronous Callback
+            function greetUser(name, callback) {
+            console.log(`Preparing greeting for ${name}...`);
+            callback(name); // Calling the passed-in function
+            }
+
+            function formalGreeting(person) {
+            console.log(`Good morning, Mr./Ms. ${person}.`);
+            }
+
+            function casualGreeting(person) {
+            console.log(`Hey ${person}, what's up!`);
+            }
+
+            greetUser("Aung Aung", formalGreeting);
+            greetUser("Su Su", casualGreeting);
+
+            // 2. Inline Anonymous Arrow Function as a Callback
+            greetUser("Kyaw", (person) => {
+            console.log(`Mingalaba, ${person}!`);
+            });
+
+            // 3. Asynchronous Callback (Simulating a Server Request)
+            function fetchUserData(userId, onSuccess) {
+            console.log(`Fetching data for user #${userId}...`);
+
+            setTimeout(() => {
+                const fakeUser = { id: userId, name: "Hla Hla", role: "Developer" };
+                onSuccess(fakeUser); // Executed 1.5 seconds later
+            }, 1500);
+            }
+
+            fetchUserData(101, (user) => {
+            console.log("Data received:", user);
+            });
+        </script>
+    </body>
+</html>

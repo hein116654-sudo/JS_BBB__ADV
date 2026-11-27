@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 6: sort() & forEach()
+            // ==========================================
+
+            // --- A. forEach() (Execute side effects, returns undefined) ---
+            const tasks = ["Design UI", "Write JS", "Test App"];
+
+            console.log("--- forEach Output ---");
+            tasks.forEach((task, index) => {
+            console.log(`Task ${index + 1}: ${task}`);
+            });
+
+
+            // --- B. sort() ---
+            const nums = [10, 2, 100, 25, 5];
+
+            // ⚠️ GOTCHA: Default .sort() converts numbers to strings and sorts alphabetically!
+            // console.log([...nums].sort()); // [10, 100, 2, 25, 5] -> WRONG for numbers!
+
+            // Correct Numeric Sort (Use spread [...] to avoid mutating original 'nums')
+            const ascending = [...nums].sort((a, b) => a - b);
+            const descending = [...nums].sort((a, b) => b - a);
+
+            console.log("Original nums (safe):", nums);
+            console.log("Ascending:", ascending);   // [2, 5, 10, 25, 100]
+            console.log("Descending:", descending); // [100, 25, 10, 5, 2]
+
+            // Sorting Strings Alphabetically using localeCompare()
+            const names = ["Zaw", "Aung", "Su Su", "Ba"];
+            const sortedNames = [...names].sort((a, b) => a.localeCompare(b));
+            console.log("Sorted Names:", sortedNames);
+
+            // Sorting Objects by a Property (e.g., Price low to high)
+            const items = [
+            { name: "Monitor", price: 250 },
+            { name: "Cable", price: 10 },
+            { name: "Keyboard", price: 75 }
+            ];
+
+            const sortedByPrice = [...items].sort((a, b) => a.price - b.price);
+            console.log("Sorted by Price (Low to High):", sortedByPrice);            
+        </script>
+    </body>
+</html>

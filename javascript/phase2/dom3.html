@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 4 - Create, Append, Remove</title>
+  <style>
+    .card { padding: 10px; margin: 6px 0; background: #eef; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h2>Dynamic Fruit List</h2>
+  <ul id="fruit-list"></ul>
+  <p id="temp-note">This note will be removed in 2 seconds...</p>
+
+  <script>
+    // ==========================================
+    // DAY 4: createElement, append, remove
+    // ==========================================
+
+    const list = document.getElementById("fruit-list");
+    const fruits = ["Apple", "Mango", "Orange"];
+
+    // 1. Creating and Appending Elements dynamically
+    fruits.forEach(fruitName => {
+      const li = document.createElement("li"); // Create <li>
+      li.textContent = fruitName;              // Set text safely
+      li.classList.add("card");                // Add CSS class
+      list.append(li);                         // Add to the end of <ul>
+    });
+
+    // 2. prepend() adds to the BEGINNING
+    const firstItem = document.createElement("li");
+    firstItem.textContent = "Banana (Prepended to top!)";
+    firstItem.classList.add("card");
+    list.prepend(firstItem);
+
+    // 3. remove() deletes an element from the DOM
+    const tempNote = document.getElementById("temp-note");
+    setTimeout(() => {
+      tempNote.remove();
+      console.log("Temporary note removed!");
+    }, 2000);
+  </script>
+</body>
+</html>

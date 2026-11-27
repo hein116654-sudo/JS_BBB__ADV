@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 2 - Selectors</title>
+</head>
+<body>
+  <h1 id="main-heading">DOM Selectors</h1>
+  <p class="info">Paragraph 1</p>
+  <p class="info">Paragraph 2</p>
+  <button class="btn">Click Me</button>
+
+  <script>
+    // ==========================================
+    // DAY 2: getElementById, querySelector, querySelectorAll
+    // ==========================================
+
+    // 1. getElementById() -> Fast, selects ONE element by ID (no '#' needed)
+    const heading = document.getElementById("main-heading");
+    heading.style.color = "darkblue";
+
+    // 2. querySelector() -> Selects the FIRST element matching a CSS selector
+    const firstInfo = document.querySelector(".info"); // Class uses '.'
+    const button = document.querySelector("button");   // Tag name
+    firstInfo.style.fontWeight = "bold";
+    button.style.padding = "8px 16px";
+
+    // 3. querySelectorAll() -> Selects ALL matching elements as a NodeList
+    const allInfoParagraphs = document.querySelectorAll(".info");
+    console.log("NodeList:", allInfoParagraphs);
+
+    // NodeList supports .forEach() directly!
+    allInfoParagraphs.forEach((p, index) => {
+      p.style.color = index === 0 ? "green" : "purple";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            const numbers = [10, 20, 30, 40];
+
+            // 1. Sum of all numbers (Initial value = 0)
+            const totalSum = numbers.reduce((acc, curr) => {
+            return acc + curr;
+            }, 0);
+            console.log("Total Sum:", totalSum); // 100
+
+            // 2. Finding Maximum Value
+            const scores = [45, 92, 67, 88, 99, 54];
+            const highestScore = scores.reduce((max, curr) => (curr > max ? curr : max), scores[0]);
+            console.log("Highest Score:", highestScore); // 99
+
+            // 3. Shopping Cart Total (Price * Quantity)
+            const cart = [
+            { item: "Book", price: 15, qty: 2 },
+            { item: "Pen", price: 3, qty: 5 },
+            { item: "Bag", price: 40, qty: 1 }
+            ];
+
+            const cartTotal = cart.reduce((total, product) => {
+            return total + (product.price * product.qty);
+            }, 0);
+            console.log("Cart Total: $", cartTotal); // (30 + 15 + 40) = 85
+
+            // 4. Counting Occurrences (Returning an Object!)
+            const votes = ["React", "Vue", "React", "Angular", "React", "Vue"];
+
+            const voteCount = votes.reduce((acc, framework) => {
+            acc[framework] = (acc[framework] || 0) + 1;
+            return acc;
+            }, {}); // Initial value is an empty object {}
+
+            console.log("Vote Count:", voteCount); // { React: 3, Vue: 2, Angular: 1 }
+
+            // 5. Grouping Objects by a Property
+            const people = [
+            { name: "Aung", role: "Frontend" },
+            { name: "Su Su", role: "Backend" },
+            { name: "Kyaw", role: "Frontend" }
+            ];
+
+            const groupedByRole = people.reduce((groups, person) => {
+            const role = person.role;
+            if (!groups[role]) {
+                groups[role] = [];
+            }
+            groups[role].push(person.name);
+            return groups;
+            }, {});
+
+            console.log("Grouped by Role:", groupedByRole);
+            // { Frontend: ["Aung", "Kyaw"], Backend: ["Su Su"] }            
+        </script>
+    </body>
+</html>

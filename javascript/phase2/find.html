@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 4: find() & findIndex()
+            // ==========================================
+
+            const users = [
+            { id: 101, name: "Mg Mg", role: "user" },
+            { id: 102, name: "Hla Hla", role: "admin" },
+            { id: 103, name: "Ko Ko", role: "admin" }
+            ];
+
+            // 1. find() -> Returns the FIRST matching element (or 'undefined' if not found)
+            const adminUser = users.find(user => user.role === "admin");
+            console.log("First Admin:", adminUser); // { id: 102, name: "Hla Hla", role: "admin" }
+
+            const missingUser = users.find(user => user.id === 999);
+            console.log("Missing User:", missingUser); // undefined
+
+            // Safe handling when using find()
+            const targetUser = users.find(u => u.id === 101);
+            if (targetUser) {
+            console.log(`Found user: ${targetUser.name}`);
+            } else {
+            console.log("User not found.");
+            }
+
+            // 2. findIndex() -> Returns the INDEX of the first match (or -1 if not found)
+            // Unlike indexOf(), findIndex() works with Objects!
+            const index = users.findIndex(user => user.id === 103);
+            console.log("Index of ID 103:", index); // 2
+
+            const notFoundIndex = users.findIndex(user => user.name === "Unknown");
+            console.log("Not found index:", notFoundIndex); // -1            
+        </script>
+    </body>
+</html>

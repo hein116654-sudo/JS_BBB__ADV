@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            const nums = [12, 5, 8, 130, 44, 3, 19];
+
+            // 1. Basic Filtering: Even numbers & numbers >= 10
+            const evenNumbers = nums.filter(n => n % 2 === 0);
+            const bigNumbers = nums.filter(n => n >= 10);
+            console.log("Even:", evenNumbers); // [12, 8, 130, 44]
+            console.log("Big (>=10):", bigNumbers); // [12, 130, 44, 19]
+
+            // 2. Filtering Objects (E-commerce / Real-world pattern)
+            const products = [
+            { id: 1, name: "Laptop", price: 1200, inStock: true },
+            { id: 2, name: "Phone", price: 600, inStock: false },
+            { id: 3, name: "Mouse", price: 25, inStock: true },
+            { id: 4, name: "Keyboard", price: 80, inStock: true }
+            ];
+
+            const availableBudgetItems = products.filter(p => p.inStock && p.price <= 100);
+            console.log("In-stock & <= $100:", availableBudgetItems);
+
+            // 3. Search Filter (Case-insensitive)
+            const searchQuery = "lap";
+            const searchResults = products.filter(p =>
+            p.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            console.log("Search 'lap':", searchResults);
+
+            // 4. Removing an item immutably (Very useful in React/State management!)
+            const idToDelete = 2;
+            const updatedProducts = products.filter(p => p.id !== idToDelete);
+            console.log("After removing ID 2:", updatedProducts);
+
+            // 5. Removing falsy values (null, undefined, "", 0, false)
+            const messyData = ["Hello", "", null, "JS", undefined, 0, "World"];
+            const cleanData = messyData.filter(Boolean);
+            console.log("Clean data:", cleanData); // ["Hello", "JS", "World"]           
+        </script>
+    </body>
+</html>

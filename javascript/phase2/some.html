@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 5: some() & every()
+            // ==========================================
+
+            const marks = [65, 80, 45, 90, 32];
+
+            // 1. some() -> Returns true if AT LEAST ONE element passes the test
+            const hasFailedStudent = marks.some(mark => mark < 40);
+            const hasPerfectScore = marks.some(mark => mark === 100);
+
+            console.log("Did anyone fail (<40)?:", hasFailedStudent); // true (32 failed)
+            console.log("Did anyone get 100?:", hasPerfectScore);     // false
+
+            // 2. every() -> Returns true ONLY IF ALL elements pass the test
+            const allPassed = marks.every(mark => mark >= 40);
+            console.log("Did EVERYONE pass?:", allPassed); // false (because of 32)
+
+            // 3. Real-world Example: Form & Cart Validation
+            const formFields = [
+            { field: "username", value: "aung123" },
+            { field: "email", value: "aung@mail.com" },
+            { field: "password", value: "" }
+            ];
+
+            const isFormComplete = formFields.every(item => item.value.trim() !== "");
+            console.log("Is form ready to submit?:", isFormComplete); // false
+
+            const shoppingCart = [
+            { name: "Shirt", inStock: true },
+            { name: "Shoes", inStock: false }
+            ];
+
+            const hasOutOfStock = shoppingCart.some(item => !item.inStock);
+            if (hasOutOfStock) {
+            console.log("Warning: Some items in your cart are out of stock!");
+            }            
+        </script>
+    </body>
+</html>

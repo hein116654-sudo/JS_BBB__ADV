@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 3 - Text & HTML</title>
+</head>
+<body>
+  <div id="demo">
+    Hello <span style="display: none;">Hidden Secret</span> World!
+  </div>
+
+  <div id="output-text"></div>
+  <div id="output-html"></div>
+
+  <script>
+    // ==========================================
+    // DAY 3: innerText, textContent, innerHTML
+    // ==========================================
+
+    const demo = document.getElementById("demo");
+
+    // 1. innerText -> Only gets VISIBLE text (ignores display: none)
+    console.log("innerText:", demo.innerText); // "Hello World!"
+
+    // 2. textContent -> Gets ALL text (including hidden text & spacing)
+    // Safe against XSS attacks when displaying user input!
+    console.log("textContent:", demo.textContent); // "Hello Hidden Secret World!"
+
+    // 3. Setting Text vs Setting HTML
+    const textBox = document.getElementById("output-text");
+    const htmlBox = document.getElementById("output-html");
+
+    // textContent treats tags as plain text
+    textBox.textContent = "<strong>Using textContent (tags show as text)</strong>";
+
+    // innerHTML parses and renders actual HTML tags
+    htmlBox.innerHTML = "<strong style='color: teal;'>Using innerHTML (rendered as bold HTML!)</strong>";
+  </script>
+</body>
+</html>

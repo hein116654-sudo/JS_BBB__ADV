@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 1 - What is DOM?</title>
+</head>
+<body>
+  <h1 id="title">Welcome to the DOM</h1>
+  <div id="container">
+    <p>First paragraph inside container</p>
+    <p>Second paragraph inside container</p>
+  </div>
+
+  <script>
+    // ==========================================
+    // DAY 1: What is the DOM?
+    // ==========================================
+
+    // 1. 'document' is the entry point to the entire HTML page
+    console.log("Document object:", document);
+    console.log("Page Title:", document.title);
+    console.log("Page URL:", document.URL);
+
+    // 2. Modifying the page directly via DOM
+    document.title = "DOM Learned!";
+    document.body.style.backgroundColor = "#f0f8ff";
+    document.body.style.fontFamily = "Arial, sans-serif";
+
+    // 3. Navigating the DOM Tree (Parent / Children)
+    const container = document.getElementById("container");
+    console.log("Container Children:", container.children);
+    console.log("First Child Element:", container.firstElementChild);
+    console.log("Parent of Container:", container.parentElement);
+  </script>
+</body>
+</html>

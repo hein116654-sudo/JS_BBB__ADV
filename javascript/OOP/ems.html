@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 7: Mini Project - Employee Management System
+            // Concepts Used: Classes, Inheritance, Polymorphism, Closures, HOFs, Map
+            // ==========================================
+
+            // --- 1. Closure-based Auto ID Generator ---
+            function createIdGenerator(start = 100) {
+            let currentId = start;
+            return () => ++currentId;
+            }
+            const generateEmpId = createIdGenerator(100);
+
+
+            // --- 2. Base Class: Employee ---
+            class Employee {
+            constructor(name, department, baseSalary) {
+                this.id = generateEmpId();
+                this.name = name;
+                this.department = department;
+                this.baseSalary = baseSalary;
+                this.type = "General";
+            }
+
+            // Overridden by subclasses
+            calculateSalary() {
+                return this.baseSalary;
+            }
+
+            getSummary() {
+                return `[ID: ${this.id}] ${this.name} | Type: ${this.type} | Dept: ${this.department} | Salary: $${this.calculateSalary()}`;
+            }
+            }
+
+
+            // --- 3. Class Inheritance: FullTimeEmployee, PartTimeEmployee, Manager ---
+            class FullTimeEmployee extends Employee {
+            constructor(name, department, baseSalary, bonus = 0) {
+                super(name, department, baseSalary);
+                this.bonus = bonus;
+                this.type = "Full-Time";
+            }
+
+            calculateSalary() {
+                return this.baseSalary + this.bonus;
+            }
+            }
+
+            class PartTimeEmployee extends Employee {
+            constructor(name, department, hourlyRate, hoursWorked) {
+                super(name, department, 0); // No fixed monthly base salary
+                this.hourlyRate = hourlyRate;
+                this.hoursWorked = hoursWorked;
+                this.type = "Part-Time";
+            }
+
+            calculateSalary() {
+                return this.hourlyRate * this.hoursWorked;
+            }
+            }
+
+            class Manager extends FullTimeEmployee {
+            constructor(name, department, baseSalary, bonus, managementAllowance = 500) {
+                super(name, department, baseSalary, bonus);
+                this.managementAllowance = managementAllowance;
+                this.type = "Manager";
+            }
+
+            calculateSalary() {
+                return super.calculateSalary() + this.managementAllowance;
+            }
+            }
+
+
+            // --- 4. Department Class ---
+            class Department {
+            constructor(name, monthlyBudget) {
+                this.name = name;
+                this.monthlyBudget = monthlyBudget;
+            }
+            }
+
+
+            // --- 5. Main Management System Class ---
+            class EmployeeManagementSystem {
+            constructor(companyName) {
+                this.companyName = companyName;
+                this.employees = new Map();
+                this.departments = new Map();
+            }
+
+            // --- Department Management ---
+            addDepartment(name, monthlyBudget) {
+                if (this.departments.has(name)) {
+                console.log(`⚠️ Department "${name}" already exists.`);
+                return;
+                }
+                this.departments.set(name, new Department(name, monthlyBudget));
+                console.log(`🏢 Department created: ${name} (Budget: $${monthlyBudget})`);
+            }
+
+            listDepartments() {
+                console.log(`\n=== ${this.companyName} DEPARTMENTS ===`);
+                for (const [deptName, dept] of this.departments) {
+                const deptEmployees = this.filterEmployees(emp => emp.department === deptName);
+                const deptPayroll = deptEmployees.reduce((sum, emp) => sum + emp.calculateSalary(), 0);
+                const status = deptPayroll <= dept.monthlyBudget ? "Within Budget" : "OVER BUDGET!";
+
+                console.log(
+                    `• ${deptName}: ${deptEmployees.length} staff | Payroll: $${deptPayroll} / $${dept.monthlyBudget} (${status})`
+                );
+                }
+            }
+
+            // --- Create Employee ---
+            createEmployee(employee) {
+                if (!(employee instanceof Employee)) {
+                console.log("❌ Error: Invalid employee object.");
+                return;
+                }
+                if (!this.departments.has(employee.department)) {
+                console.log(`❌ Error: Department "${employee.department}" does not exist. Create it first.`);
+                return;
+                }
+                this.employees.set(employee.id, employee);
+                console.log(`✅ Created: ${employee.getSummary()}`);
+                return employee.id;
+            }
+
+            // --- Update Employee (Including Department Transfer & Salary Fields) ---
+            updateEmployee(id, updates) {
+                const emp = this.employees.get(id);
+                if (!emp) {
+                console.log(`❌ Update failed: Employee ID ${id} not found.`);
+                return;
+                }
+
+                if (updates.department && !this.departments.has(updates.department)) {
+                console.log(`❌ Update failed: Target department "${updates.department}" does not exist.`);
+                return;
+                }
+
+                // Safely update only provided fields
+                Object.assign(emp, updates);
+                console.log(`🔄 Updated ID ${id}: ${emp.getSummary()}`);
+            }
+
+            // --- Delete Employee ---
+            deleteEmployee(id) {
+                const emp = this.employees.get(id);
+                if (!emp) {
+                console.log(`❌ Delete failed: Employee ID ${id} not found.`);
+                return;
+                }
+                this.employees.delete(id);
+                console.log(`🗑️ Deleted Employee: ${emp.name} (ID: ${id})`);
+            }
+
+            // --- Higher-Order Function for Flexible Filtering ---
+            filterEmployees(predicateFn) {
+                return [...this.employees.values()].filter(predicateFn);
+            }
+
+            // --- Salary Calculation & Payroll Report ---
+            calculateTotalPayroll(taxRate = 0.05) {
+                const all = [...this.employees.values()];
+                const grossTotal = all.reduce((sum, emp) => sum + emp.calculateSalary(), 0);
+                const totalTax = grossTotal * taxRate;
+                const netTotal = grossTotal - totalTax;
+
+                console.log(`
+            💰 === PAYROLL REPORT (${this.companyName}) ===
+            Total Employees : ${all.length}
+            Gross Payroll   : $${grossTotal}
+            Tax (${taxRate * 100}%)       : $${totalTax.toFixed(2)}
+            Net Payroll     : $${netTotal.toFixed(2)}
+            =============================================
+                `);
+            }
+
+            listAllEmployees() {
+                console.log(`\n=== ALL EMPLOYEES (${this.employees.size}) ===`);
+                if (this.employees.size === 0) {
+                console.log("No employees found.");
+                return;
+                }
+                for (const emp of this.employees.values()) {
+                console.log(emp.getSummary());
+                }
+            }
+            }
+
+
+            // ==========================================
+            // RUNNING THE EMPLOYEE MANAGEMENT SYSTEM
+            // ==========================================
+
+            const techCorp = new EmployeeManagementSystem("TechMyanmar Co.");
+
+            // 1. Setup Departments
+            techCorp.addDepartment("Engineering", 8000);
+            techCorp.addDepartment("Marketing", 3500);
+
+            // 2. Create Employees (Using Class Inheritance)
+            const id1 = techCorp.createEmployee(new Manager("Aung Aung", "Engineering", 3000, 800, 600));
+            const id2 = techCorp.createEmployee(new FullTimeEmployee("Su Su", "Engineering", 2200, 300));
+            const id3 = techCorp.createEmployee(new PartTimeEmployee("Mg Mg", "Marketing", 25, 80));
+            const id4 = techCorp.createEmployee(new FullTimeEmployee("Hla Hla", "Marketing", 1800, 200));
+
+            // Try creating employee in non-existent department
+            techCorp.createEmployee(new FullTimeEmployee("Ko Ko", "Sales", 1500));
+
+            // 3. View Employees & Departments
+            techCorp.listAllEmployees();
+            techCorp.listDepartments();
+
+            // 4. Update Employee (Give Mg Mg more hours & Transfer Hla Hla to Engineering)
+            console.log("\n--- Updating Employees ---");
+            techCorp.updateEmployee(id3, { hoursWorked: 100 });
+            techCorp.updateEmployee(id4, { department: "Engineering", bonus: 400 });
+
+            // 5. Delete Employee
+            techCorp.deleteEmployee(id2); // Remove Su Su
+
+            // 6. Final Reports
+            techCorp.listAllEmployees();
+            techCorp.listDepartments();
+            techCorp.calculateTotalPayroll(0.05);
+        </script>
+    </body>
+</html>

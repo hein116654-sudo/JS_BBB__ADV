@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 2: Higher-Order Functions (HOF)
+            // ==========================================
+
+            // 1. HOF that ACCEPTS a function as an argument
+            function calculate(a, b, operationFn) {
+            return operationFn(a, b);
+            }
+
+            const add = (x, y) => x + y;
+            const multiply = (x, y) => x * y;
+
+            console.log("HOF Add:", calculate(10, 5, add));           // 15
+            console.log("HOF Multiply:", calculate(10, 5, multiply)); // 50
+
+            // 2. Building our own custom filter (like Array.prototype.filter)
+            function customFilter(array, testFn) {
+            const result = [];
+            for (const item of array) {
+                if (testFn(item)) {
+                result.push(item);
+                }
+            }
+            return result;
+            }
+
+            const numbers = [1, 2, 3, 4, 5, 6];
+            const evens = customFilter(numbers, n => n % 2 === 0);
+            console.log("Custom Filter (Evens):", evens); // [2, 4, 6]
+
+            // 3. HOF that RETURNS a new function (Function Factory)
+            function createTaxCalculator(taxRate) {
+            return function (amount) {
+                return amount + amount * taxRate;
+            };
+            }
+
+            const calcCommercialTax = createTaxCalculator(0.05); // 5% tax
+            const calcLuxuryTax = createTaxCalculator(0.20);     // 20% tax
+
+            console.log("With 5% tax ($100):", calcCommercialTax(100)); // 105
+            console.log("With 20% tax ($100):", calcLuxuryTax(100));    // 120            
+        </script>
+    </body>
+</html>

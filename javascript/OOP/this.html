@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 3: Closures
+            // ==========================================
+
+            // 1. Counter Factory (Each counter has its own private memory)
+            function createCounter() {
+            let count = 0; // Private variable! Cannot be changed directly from outside.
+
+            return function () {
+                count++;
+                return count;
+            };
+            }
+
+            const counterA = createCounter();
+            const counterB = createCounter();
+
+            console.log("Counter A:", counterA()); // 1
+            console.log("Counter A:", counterA()); // 2
+            console.log("Counter B:", counterB()); // 1 (Independent state!)
+
+            // 2. Real-world Closure: Data Privacy (Bank Account)
+            function createBankAccount(owner, initialBalance) {
+            let balance = initialBalance; // Hidden from outside world
+
+            return {
+                deposit(amount) {
+                if (amount > 0) {
+                    balance += amount;
+                    console.log(`${owner} deposited $${amount}. Balance: $${balance}`);
+                }
+                },
+                withdraw(amount) {
+                if (amount > balance) {
+                    console.log("Insufficient balance!");
+                    return;
+                }
+                balance -= amount;
+                console.log(`${owner} withdrew $${amount}. Balance: $${balance}`);
+                },
+                getBalance() {
+                return balance;
+                }
+            };
+            }
+
+            const myAccount = createBankAccount("Mg Mg", 500);
+            myAccount.deposit(200);
+            myAccount.withdraw(100);
+            console.log("Current Balance:", myAccount.getBalance()); // 600
+            console.log("Direct access to balance:", myAccount.balance); // undefined (Protected!)
+        </script>
+    </body>
+</html>

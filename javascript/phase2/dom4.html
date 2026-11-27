@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 5 - DOM Events</title>
+</head>
+<body>
+  <h2>DOM Events Demo</h2>
+
+  <button id="click-btn">Clicked 0 times</button>
+  <br /><br />
+
+  <input type="text" id="live-input" placeholder="Type something..." />
+  <p>Live Preview: <span id="preview">-</span></p>
+
+  <form id="my-form">
+    <input type="text" id="username" placeholder="Enter username" />
+    <button type="submit">Submit Form</button>
+  </form>
+  <p id="form-msg"></p>
+
+  <script>
+    // ==========================================
+    // DAY 5: DOM Events (addEventListener)
+    // ==========================================
+
+    // 1. Click Event
+    let count = 0;
+    const btn = document.getElementById("click-btn");
+    btn.addEventListener("click", () => {
+      count++;
+      btn.textContent = `Clicked ${count} times`;
+    });
+
+    // 2. Input Event (Fires every time user types)
+    const liveInput = document.getElementById("live-input");
+    const preview = document.getElementById("preview");
+    liveInput.addEventListener("input", (event) => {
+      // event.target refers to the input element itself
+      preview.textContent = event.target.value || "-";
+    });
+
+    // 3. Form Submit Event & preventDefault()
+    const form = document.getElementById("my-form");
+    const usernameInput = document.getElementById("username");
+    const formMsg = document.getElementById("form-msg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault(); // IMPORTANT: Stops the page from refreshing!
+      const name = usernameInput.value.trim();
+      formMsg.textContent = name ? `Submitted: ${name}` : "Please enter a username!";
+      usernameInput.value = "";
+    });
+  </script>
+</body>
+</html>

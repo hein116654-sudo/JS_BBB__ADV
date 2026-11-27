@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 6: Classes, Inheritance & Prototype
+            // ==========================================
+
+            // 1. Base (Parent) Class
+            class Person {
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+
+            introduce() {
+                return `Hi, I'm ${this.name}, ${this.age} years old.`;
+            }
+
+            // Static method belongs to the Class itself, not instances
+            static species() {
+                return "Homo sapiens";
+            }
+            }
+
+            // 2. Child Class (Inheritance using 'extends' and 'super')
+            class Developer extends Person {
+            constructor(name, age, language) {
+                super(name, age); // Must call parent constructor FIRST!
+                this.language = language;
+            }
+
+            // Method Overriding (Polymorphism)
+            introduce() {
+                return `${super.introduce()} I code in ${this.language}.`;
+            }
+
+            code() {
+                console.log(`${this.name} is writing ${this.language} code...`);
+            }
+            }
+
+            const dev = new Developer("Aung Aung", 24, "JavaScript");
+            console.log(dev.introduce());
+            dev.code();
+            console.log("Static method:", Person.species());
+
+            // 3. Inspecting the Prototype Chain under the hood
+            console.log("Has own 'name'?:", Object.hasOwn(dev, "name")); // true
+            console.log("Has own 'code'?:", Object.hasOwn(dev, "code")); // false (lives on Developer.prototype)
+            console.log("Prototype match:", Object.getPrototypeOf(dev) === Developer.prototype); // true
+            console.log("dev instanceof Person:", dev instanceof Person);       // true
+            console.log("dev instanceof Developer:", dev instanceof Developer); // true
+        </script>
+    </body>
+</html>

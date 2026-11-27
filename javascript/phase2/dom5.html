@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 6 - Bubbling & Delegation</title>
+  <style>
+    #parent-box { padding: 20px; background: #ffeaa7; }
+    #child-btn { padding: 10px 20px; }
+    .item { margin: 5px 0; padding: 8px; background: #dfe6e9; display: flex; gap: 10px; }
+  </style>
+</head>
+<body>
+  <h3>1. Event Bubbling</h3>
+  <div id="parent-box">
+    Parent Box
+    <button id="child-btn">Child Button</button>
+  </div>
+
+  <h3>2. Event Delegation (Works for dynamic items too!)</h3>
+  <button id="add-btn">Add New Item</button>
+  <ul id="item-list">
+    <li class="item">Item 1 <button class="delete-btn">Delete</button></li>
+    <li class="item">Item 2 <button class="delete-btn">Delete</button></li>
+  </ul>
+
+  <script>
+    // ==========================================
+    // DAY 6: Event Bubbling & Event Delegation
+    // ==========================================
+
+    // --- A. EVENT BUBBLING ---
+    document.getElementById("parent-box").addEventListener("click", () => {
+      console.log("Parent Box was clicked (Bubbled up!)");
+    });
+
+    document.getElementById("child-btn").addEventListener("click", (e) => {
+      console.log("Child Button was clicked!");
+      // e.stopPropagation(); // Uncomment this to stop bubbling up to parent
+    });
+
+    // --- B. EVENT DELEGATION ---
+    // Instead of adding listeners to every delete button, attach ONE to the <ul>!
+    const itemList = document.getElementById("item-list");
+    let itemNum = 3;
+
+    itemList.addEventListener("click", (e) => {
+      // Check if the clicked element is a Delete button
+      if (e.target.classList.contains("delete-btn")) {
+        const li = e.target.closest(".item"); // Find nearest parent .item
+        li.remove();
+        console.log("Deleted item via Event Delegation!");
+      }
+    });
+
+    // Newly added items automatically work with the single listener on <ul>
+    document.getElementById("add-btn").addEventListener("click", () => {
+      const li = document.createElement("li");
+      li.className = "item";
+      li.innerHTML = `Item ${itemNum++} <button class="delete-btn">Delete</button>`;
+      itemList.append(li);
+    });
+  </script>
+</body>
+</html>

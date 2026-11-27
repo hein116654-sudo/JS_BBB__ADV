@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            // ==========================================
+            // DAY 5: Constructor Functions
+            // ==========================================
+
+            // Convention: Constructor Functions start with a Capital Letter
+            function Employee(name, role, salary) {
+            // When called with 'new':
+            // 1. A new empty object {} is created
+            // 2. 'this' is pointed to that new object
+            this.name = name;
+            this.role = role;
+            this.salary = salary;
+            // 3. The object is automatically returned
+            }
+
+            // Put shared methods on .prototype so every instance shares ONE copy (saves memory!)
+            Employee.prototype.getInfo = function () {
+            return `${this.name} - ${this.role} ($${this.salary})`;
+            };
+
+            Employee.prototype.giveRaise = function (amount) {
+            this.salary += amount;
+            console.log(`${this.name} got a raise! New salary: $${this.salary}`);
+            };
+
+            const emp1 = new Employee("Mya Mya", "Designer", 1200);
+            const emp2 = new Employee("Ko Ko", "QA Engineer", 1000);
+
+            console.log(emp1.getInfo());
+            console.log(emp2.getInfo());
+            emp2.giveRaise(200);
+
+            console.log("Is emp1 an Employee?:", emp1 instanceof Employee); // true            
+        </script>
+    </body>
+</html>
