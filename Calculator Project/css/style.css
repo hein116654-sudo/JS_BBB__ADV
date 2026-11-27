@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.calBody {
+  width: 400px;
+  height: 500px;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: #121621;
+  margin: 20px auto;
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.screen {
+  padding: 10px;
+  margin: 15px;
+  height: 100px;
+  background-color: #232733;
+  border-radius: 15px;
+}
+
+#history, #result {
+  color: white;
+  text-align: right;
+  font-weight: bold;
+  width: 100%;
+  margin: 0px;
+}
+#history{
+    font-size: 20px;
+}
+#result {
+  font-size: 75px;
+}
+
+.mainbtn {
+  margin: 0px 15px;
+}
+
+.topbtn, .btn,
+.operator, .btnzero, .equal {
+  height: 60px;
+  margin: 3px;
+  font-weight: bold;
+  font-size: x-large;
+  border-radius: 15px;
+  color: white;
+}
+
+.topbtn, .btn, .operator {
+  width: 83px;
+}
+
+.btn, .btnzero {
+  border: 1px solid #282b3a;
+  background-color: #282b3a;
+}
+
+.btnzero {
+  width: 160px;
+}
+
+.operator, .equal {
+  background-color: #fe9b1a;
+  border: 1px solid #fe9b1a;
+}
+
+.equal {
+  width: 100px;
+}
+
+.topbtn {
+  border: 1px solid #565d79;
+  background-color: #565d79;
+}
